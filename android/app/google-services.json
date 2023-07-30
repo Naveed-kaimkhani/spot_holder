@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "101100602179",
+    "project_id": "spot-holder",
+    "storage_bucket": "spot-holder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101100602179:android:1df3bc5b5b55bed7dca5f6",
+        "android_client_info": {
+          "package_name": "com.example.spot_holder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101100602179-56l4q25hf0qlfg7egrso43bju8bb1t05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3TYpvaGcsniFZKx7SVgHFyrfMA22G0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101100602179-56l4q25hf0qlfg7egrso43bju8bb1t05.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
