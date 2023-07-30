@@ -80,7 +80,7 @@ class _UserSignUpState extends State<UserSignUp> {
         // .signUpUser(_emailController.text, _passwordController.text, context)
         .signUpUser(_emailController.text, _passwordController.text, context)
         .then((User? user) async {
-          print("get location");
+      print("get location");
       final value =
           await _firebaseUserRepository.getUserCurrentLocation(context);
 
@@ -278,7 +278,7 @@ class _UserSignUpState extends State<UserSignUp> {
                   ),
                   // k,
                   SizedBox(
-                    height: 12.h,
+                    height: 18.h,
                   ),
 
                   isLoadingNow

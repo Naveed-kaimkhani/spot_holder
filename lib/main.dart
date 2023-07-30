@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:spot_holder/presentation/user/user_login.dart';
 import 'package:spot_holder/presentation/user/user_signup.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/utils/routes/routes.dart';
+
 // GetIt getIt = GetIt.instance;
 late Size mq;
 
@@ -16,7 +16,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // print(message.notification!.title);
   await Firebase.initializeApp();
 }
-void main()  async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-            mq = MediaQuery.of(context).size;
+    mq = MediaQuery.of(context).size;
 
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -57,13 +58,12 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home:UserLogin(),
+            home: UserSignUp(),
             onGenerateRoute: Routes.onGenerateRoute,
           ),
         );
       },
       // child:
-
     );
   }
 }

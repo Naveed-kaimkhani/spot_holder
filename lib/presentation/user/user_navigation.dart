@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
 import '../../style/images.dart';
 import '../../style/styling.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UserNavigation extends StatefulWidget {
   const UserNavigation({Key? key}) : super(key: key);
@@ -28,6 +29,9 @@ class _UserNavigationState extends State<UserNavigation> {
   Widget currentScreen = UserHomepage();
   @override
   Widget build(BuildContext context) {
+    SizedBox k = SizedBox(
+      height: 10.h,
+    );
     return Scaffold(
         // backgroundColor: Styling.primaryColor,
         body: PageStorage(bucket: bucket, child: currentScreen),
@@ -51,12 +55,65 @@ class _UserNavigationState extends State<UserNavigation> {
                               currentindex = 0;
                             });
                           },
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             Images.home,
                             height: 26.h,
                             width: 26.w,
-                            color:
+                            colorFilter: ColorFilter.mode(
                                 currentindex == 0 ? Colors.white : Colors.grey,
+                                BlendMode.srcIn),
+                          ),
+                        ),
+                        k,
+                        MaterialButton(
+                          minWidth: 40,
+                          onPressed: () {
+                            setState(() {
+                              currentScreen = UserHomepage();
+                              currentindex = 1;
+                            });
+                          },
+                          child: SvgPicture.asset(
+                            Images.dashboard,
+                            height: 26.h,
+                            width: 26.w,
+                            colorFilter: ColorFilter.mode(
+                                currentindex == 1 ? Colors.white : Colors.grey,
+                                BlendMode.srcIn),
+                          ),
+                        ),
+                        k,
+                        MaterialButton(
+                          minWidth: 40,
+                          onPressed: () {
+                            setState(() {
+                              currentScreen = UserHomepage();
+                              currentindex = 2;
+                            });
+                          },
+                          child: SvgPicture.asset(
+                            Images.wallet,
+                            height: 26.h,
+                            width: 26.w,
+                            colorFilter: ColorFilter.mode(
+                                currentindex == 2 ? Colors.white : Colors.grey,
+                                BlendMode.srcIn),
+                          ),
+                        ),
+                        k,
+                        MaterialButton(
+                          minWidth: 40,
+                          onPressed: () {
+                            setState(() {
+                              currentScreen = UserHomepage();
+                              currentindex = 3;
+                            });
+                          },
+                          child: Icon(
+                            size: 38.w,
+                            Icons.notifications_none_rounded,
+                            color:
+                                currentindex == 3 ? Colors.white : Colors.grey,
                           ),
                         ),
                       ],

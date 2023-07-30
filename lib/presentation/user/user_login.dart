@@ -8,12 +8,14 @@ import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:spot_holder/style/images.dart';
 import 'package:spot_holder/utils/utils.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../style/styling.dart';
 import '../../Data/FirebaseUserRepository.dart';
 import '../../Domain/models/user_model.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/storage_services.dart';
 import '../widget/auth_header.dart';
+import '../widget/custom_divider.dart';
 import '../widget/input_field.dart';
 
 class UserLogin extends StatefulWidget {
@@ -118,15 +120,18 @@ class _UserLoginState extends State<UserLogin> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AuthHeader(
-                    height: 300.h,
+                    height: 260.h,
                   ),
                   SizedBox(
-                    height: 50.h,
+                    height: 30.h,
                   ),
                   Image.asset(
                     Images.logo,
-                    width: 241.h,
+                    width: 241.w,
                     height: 45.h,
+                  ),
+                  SizedBox(
+                    height: 10.h,
                   ),
                   InputField(
                     hint_text: "Email",
@@ -175,7 +180,7 @@ class _UserLoginState extends State<UserLogin> {
                         onPressed: () {}, child: const Text("Forget Password")),
                   ),
                   SizedBox(
-                    height: 16.h,
+                    height: 12.h,
                   ),
                   Center(
                     child: isLoadingNow
@@ -188,6 +193,26 @@ class _UserLoginState extends State<UserLogin> {
                               _login();
                             },
                             color: Styling.primaryColor),
+                  ),
+                  SizedBox(
+                    height: 18.h,
+                  ),
+
+                  CustomDivider(),
+                  // Row(
+                  //   children: [
+                  //     Text("or"),
+                  //     CustomDivider(),
+                  //   ],
+                  // ),
+
+                  SizedBox(
+                    height: 8.h,
+                  ),
+                  AuthButton(
+                    text: "SignUp",
+                    func: () {},
+                    color: Styling.primaryColor,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 48.w),

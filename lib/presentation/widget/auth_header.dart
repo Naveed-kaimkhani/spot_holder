@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../main.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/images.dart';
@@ -34,7 +35,7 @@ class AuthHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
+          SvgPicture.asset(
             Images.car,
             // color: Colors.white,
             height: 136.h,
