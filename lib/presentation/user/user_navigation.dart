@@ -30,7 +30,7 @@ class _UserNavigationState extends State<UserNavigation> {
   @override
   Widget build(BuildContext context) {
     SizedBox k = SizedBox(
-      height: 10.h,
+      height: 10.w,
     );
     return Scaffold(
         // backgroundColor: Styling.primaryColor,
@@ -69,7 +69,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = UserHomepage();   
                               currentindex = 1;
                             });
                           },

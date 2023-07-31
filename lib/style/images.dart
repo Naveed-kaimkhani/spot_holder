@@ -9,6 +9,8 @@ class Images {
   static const String home = 'assets/home.svg';
   static const String dashboard = 'assets/dashboard.svg';
   static const String wallet = 'assets/wallet.svg';
+  static const String pointer = 'assets/pointer.svg';
+  static const String spot = 'assets/spot.svg';
  
  
   

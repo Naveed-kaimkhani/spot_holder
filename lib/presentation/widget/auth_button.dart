@@ -24,8 +24,8 @@ class AuthButton extends StatelessWidget {
           gradient: const LinearGradient(
             colors: [
               Color(0xff662D91), // Start color (primaryColor)
-              Color.fromARGB(255, 162, 148,
-                  232), // End color (you can change this to any other color you want)
+              Color.fromARGB(255, 102, 78,
+                  222), // End color (you can change this to any other color you want)
             ],
             begin: Alignment.centerRight,
             end: Alignment.centerLeft,

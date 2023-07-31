@@ -45,7 +45,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_screenutil: ^5.8.4
   shared_preferences: ^2.2.0
   cloud_firestore: ^4.8.2
   firebase_auth: ^4.6.3
@@ -54,6 +53,7 @@ dev_dependencies:
   provider: ^6.0.5
   image_picker: ^1.0.1
   firebase_core: ^2.14.0
+  flutter_screenutil: ^5.8.4
   another_flushbar: ^1.12.30
   cached_network_image: ^3.2.3
   internet_connection_checker: ^1.0.0+1
@@ -65,8 +65,8 @@ dev_dependencies:
   geolocator: ^9.0.2
   shimmer: ^3.0.0
   intl: ^0.18.1
-  http: ^0.13.6
-  firebase_messaging: ^14.6.3
+  http: ^0.13.1
+  firebase_messaging: ^14.6.5
   flutter_local_notifications: ^14.1.1
   lottie: ^2.4.0
   flutter_image_compress: ^2.0.3

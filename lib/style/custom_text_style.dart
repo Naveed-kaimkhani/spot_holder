@@ -13,10 +13,40 @@ class CustomTextStyle {
     fontSize: 18.sp,
     fontWeight: FontWeight.w700,
   );
-  
+  static final font_18_black = TextStyle(
+    color: Colors.black,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static final font_18_primary = TextStyle(
+    color: Styling.primaryColor,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+  );
+
   static final font_14 = TextStyle(
     color: Colors.white,
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
+  );
+
+  static final font_14_black = TextStyle(
+    color: Colors.black,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+  );
+  
+  static final font_12_grey = TextStyle(
+    color:  Color(0xFFA5AAB7),
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+  );
+  
+
+  static final font_22 = TextStyle(
+    color: Colors.white,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
   );
 }
