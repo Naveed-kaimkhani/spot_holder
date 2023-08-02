@@ -1,655 +1,446 @@
-// import 'package:flutter/cupertino.dart';
+// import 'dart:typed_data';
+// import 'package:email_validator/email_validator.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:provider/provider.dart';
+// import 'package:rentpayy/components/authButton.dart';
+// import 'package:rentpayy/components/custom_appbar.dart';
+// import 'package:rentpayy/components/inputfields.dart';
+// import 'package:rentpayy/navigation_page.dart';
+// import 'package:rentpayy/utils/StorageService.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import '../../components/auth_screens_decor.dart';
+// import 'package:rentpayy/utils/utils.dart';
+// import '../../components/circle_progress.dart';
+// import '../../model/UserModel.dart';
+// import '../../resources/FirebaseRepository.dart';
+// import '../../utils/style/AppColors.dart';
+// import '../../view_model/UserDetailsProvider.dart';
+// import '../presentation/widget/decor.dart';
 
-// Container(
-//   // signup4JH (25:941)
-//   width:  double.infinity,
-//   height:  812*fem,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xff1e1e20),
-//   ),
-//   child:  
-// Container(
-//   // iphone11prox1YjF (25:942)
-//   width:  double.infinity,
-//   height:  double.infinity,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xfff7f7fa),
-//   ),
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // iphonexstatusbarsstatusbarblac (25:944)
-//   padding:  EdgeInsets.fromLTRB(34*fem, 16*fem, 14.67*fem, 11*fem),
-//   width:  double.infinity,
-//   decoration:  BoxDecoration (
-//     image:  DecorationImage (
-//       fit:  BoxFit.cover,
-//       image:  NetworkImage (
-//         [Image url]
+// class User_signup_page extends StatefulWidget {
+//   const User_signup_page({Key? key}) : super(key: key);
+
+//   @override
+//   State<User_signup_page> createState() => _User_signup_pageState();
+// }
+
+// class _User_signup_pageState extends State<User_signup_page> {
+//   final FirebaseRepository _firebaseRepository = FirebaseRepository();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     utils.checkConnectivity(context);
+//   }
+
+//   FocusNode emailFocusNode = FocusNode();
+//   FocusNode nameFocusNode = FocusNode();
+//   FocusNode numberFocusNode = FocusNode();
+//   FocusNode passwordFocusNode = FocusNode();
+//   FocusNode confirmpasswordFocusNode = FocusNode();
+//   FocusNode ageFocusNode = FocusNode();
+//   FocusNode dropdownFocusNode = FocusNode();
+
+//   TextEditingController _emailController = TextEditingController();
+//   TextEditingController _nameController = TextEditingController();
+//   TextEditingController _numberController = TextEditingController();
+//   TextEditingController _ageController = TextEditingController();
+//   TextEditingController _passwordController = TextEditingController();
+//   TextEditingController _confirmpasswordController = TextEditingController();
+
+//   bool? obsecureText = true;
+//   List<String> genderList = ["Male", "Female"];
+//   String? selectedvalue = "Gender";
+//   bool isLoadingNow = false;
+//   bool _obsecureText = true;
+//   Uint8List? _profileImage;
+//   // File? _profileImage;
+
+//   @override
+//   void dispose() {
+//     dropdownFocusNode.dispose();
+//     ageFocusNode.dispose();
+//     confirmpasswordFocusNode.dispose();
+//     passwordFocusNode.dispose();
+//     emailFocusNode.dispose();
+//     nameFocusNode.dispose();
+//     numberFocusNode.dispose();
+//     _emailController.dispose();
+//     _nameController.dispose();
+//     _numberController.dispose();
+//     _ageController.dispose();
+//     _passwordController.dispose();
+//     _confirmpasswordController.dispose();
+//     super.dispose();
+//   }
+
+//   void isLoading(bool value) {
+//     setState(() {
+//       isLoadingNow = value;
+//     });
+//   }
+
+//   void _validateFields() {
+//     if (_nameController.text.trim().isEmpty &&
+//         _numberController.text.trim().isEmpty &&
+//         _emailController.text.trim().isEmpty &&
+//         _passwordController.text.trim().isEmpty &&
+//         _confirmpasswordController.text.trim().isEmpty &&
+//         _confirmpasswordController.text.trim().isEmpty &&
+//         _ageController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage('Enter your complete details', context);
+//     } else if (_nameController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage('Enter your full name', context);
+//     } else if (_numberController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage('Enter your phone', context);
+//     } else if (_emailController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage('Enter your email', context);
+//     } else if (_numberController.text.length != 10) {
+//       utils.flushBarErrorMessage('Invalid Phone Number', context);
+//     } else if (_passwordController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage('Enter your password', context);
+//     } else if (_confirmpasswordController.text.trim().isEmpty) {
+//       utils.flushBarErrorMessage(
+//           'Enter your password again to confirm', context);
+//     } else if (!EmailValidator.validate(_emailController.text)) {
+//       utils.flushBarErrorMessage('Invalid Email', context);
+//     } else if (_passwordController.text != _confirmpasswordController.text) {
+//       utils.flushBarErrorMessage('Enter same password to confirm', context);
+//     } else if (_profileImage == null) {
+//       utils.flushBarErrorMessage('Please upload a profile picture', context);
+//     } else {
+//       isLoading(true);
+//       UserModel userModel = UserModel(
+//         name: _nameController.text.trim(),
+//         phone: _numberController.text.trim(),
+//         email: _emailController.text.trim(),
+//         gender: selectedvalue!.trim(),
+//         age: _ageController.text.trim(),
+//       );
+//       _signup(userModel);
+//     }
+//   }
+
+//   void _signup(UserModel userModel) {
+//     _firebaseRepository
+//         .signUp(_emailController.text, _passwordController.text, context)
+//         .then((User? user) async {
+//       if (user != null) {
+//         userModel.uid = user.uid;
+//         userModel.uid = user.uid;
+//         userModel.profileImage = await _firebaseRepository.uploadProfileImage(
+//             imageFile: _profileImage!, uid: userModel.uid!);
+//         _saveUser(user, userModel);
+//       } else {
+//         isLoading(false);
+//         // utils.flushBarErrorMessage('Failed to Signup', context);
+//       }
+//     }).catchError((error) {
+//       isLoading(false);
+//       utils.flushBarErrorMessage(error.message.toString(), context);
+//     });
+//   }
+
+//   void _saveUser(User firebaseUser, UserModel userModel) {
+//     _firebaseRepository.saveUserDataToFirestore(userModel).then((value) async {
+//       await StorageService.saveUser(userModel).then((value) async {
+//         //await  StorageService.readUser();
+//         Provider.of<UserDetailsProvider>(context, listen: false)
+//             .getUserLocally();
+//         isLoading(false);
+//         SharedPreferences preferences = await SharedPreferences.getInstance();
+//         // initScreen = preferences.getInt('initScreen');
+//         await preferences.setInt('initScreen', 1);
+//         await preferences.setInt('isUser', 1);
+//         Navigator.pushReplacement(context,
+//             MaterialPageRoute(builder: (context) => navigation_page()));
+//       });
+//     }).catchError((error) {
+//       isLoading(false);
+//       utils.flushBarErrorMessage(error.message.toString(), context);
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         FocusManager.instance.primaryFocus?.unfocus();
+//       },
+//       child: SafeArea(
+//         child: Scaffold(
+//           appBar: custom_appbar(),
+//           body: Stack(
+//             children: [
+//               Container(
+//                 width: MediaQuery.of(context).size.width,
+//                 height: MediaQuery.of(context).size.height,
+//                 color: AppColors.primaryColor,
+//                 child: Container(
+//                   decoration: auth_screens_decor(),
+//                   child: Padding(
+//                     padding: EdgeInsets.only(left: 28.w, right: 28.w),
+//                     child: SingleChildScrollView(
+//                       child: Column(
+//                         children: [
+//                           SizedBox(
+//                             height: 38.h,
+//                           ),
+//                           Text(
+//                             "User Signup",
+//                             style: TextStyle(
+//                                 fontSize: 26.sp, fontWeight: FontWeight.w500),
+//                           ),
+//                           SizedBox(
+//                             height: 32.h,
+//                           ),
+//                           UploadProfile(_profileImage),
+//                           SizedBox(
+//                             height: 15.16.h,
+//                           ),
+//                           inputfields(
+//                             hint_text: "Enter name",
+//                             currentNode: nameFocusNode,
+//                             focusNode: nameFocusNode,
+//                             nextNode: numberFocusNode,
+//                             controller: _nameController,
+//                             obsecureText: false,
+//                           ),
+//                           SizedBox(
+//                             height: 16.h,
+//                           ),
+//                           inputfields(
+//                             hint_text: "Enter phone number",
+//                             currentNode: numberFocusNode,
+//                             focusNode: numberFocusNode,
+//                             nextNode: ageFocusNode,
+//                             controller: _numberController,
+//                             keyboardType: TextInputType.number,
+//                             obsecureText: false,
+//                             preicon: Container(
+//                               width: 60.w,
+//                               height: 60.h,
+//                               child: Row(
+//                                 children: [
+//                                   Text(
+//                                     "  +92",
+//                                     style: TextStyle(fontSize: 17.sp),
+//                                   ),
+//                                   VerticalDivider(
+//                                     thickness: 2.r,
+//                                     color: Colors.grey.shade700,
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ),
+//                           SizedBox(
+//                             height: 16.h,
+//                           ),
+//                           Row(
+//                             children: [
+//                               SizedBox(
+//                                 width: 7.w,
+//                               ),
+//                               Expanded(
+//                                 child: Container(
+//                                   height: 60.h,
+//                                   width: 179.w,
+//                                   decoration: BoxDecoration(
+//                                       color: AppColors.textfieldsColor,
+//                                       borderRadius: BorderRadius.circular(7.r)),
+//                                   child: TextField(
+//                                     // keyboardType: keyboardType,
+//                                     onEditingComplete: () =>
+//                                         utils.fieldFocusChange(context,
+//                                             ageFocusNode, emailFocusNode),
+//                                     controller: _ageController,
+//                                     cursorColor: Colors.black,
+//                                     focusNode: ageFocusNode,
+//                                     keyboardType: TextInputType.number,
+//                                     decoration: InputDecoration(
+//                                       focusedBorder: OutlineInputBorder(
+//                                         borderRadius:
+//                                             BorderRadius.circular(12.r),
+//                                         borderSide: BorderSide(
+//                                             color: AppColors.primaryColor,
+//                                             width: 1.0),
+//                                       ),
+//                                       border: InputBorder.none,
+//                                       hintText: " Age",
+//                                       hintStyle: TextStyle(
+//                                         color: Colors.black,
+//                                         fontSize: 17.sp,
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ),
+//                               )
+//                             ],
+//                           ),
+//                           SizedBox(
+//                             height: 16.h,
+//                           ),
+//                           inputfields(
+//                             hint_text: "Enter email address",
+//                             currentNode: emailFocusNode,
+//                             focusNode: emailFocusNode,
+//                             nextNode: passwordFocusNode,
+//                             controller: _emailController,
+//                             obsecureText: false,
+//                             keyboardType: TextInputType.emailAddress,
+//                           ),
+//                           SizedBox(
+//                             height: 16.h,
+//                           ),
+//                           inputfields(
+//                               hint_text: "Set password",
+//                               currentNode: passwordFocusNode,
+//                               focusNode: passwordFocusNode,
+//                               nextNode: confirmpasswordFocusNode,
+//                               keyboardType: TextInputType.text,
+//                               controller: _passwordController,
+//                               icon: obsecureText!
+//                                   ? Icons.visibility_off
+//                                   : Icons.remove_red_eye,
+//                               obsecureText: obsecureText,
+//                               onIconPress: () {
+//                                 setState(() {
+//                                   obsecureText = !obsecureText!;
+//                                 });
+//                               }),
+//                           SizedBox(
+//                             height: 16.h,
+//                           ),
+//                           inputfields(
+//                             hint_text: "Confirm password",
+//                             currentNode: confirmpasswordFocusNode,
+//                             focusNode: confirmpasswordFocusNode,
+//                             nextNode: confirmpasswordFocusNode,
+//                             controller: _confirmpasswordController,
+//                             obsecureText: _obsecureText,
+//                           ),
+//                           SizedBox(
+//                             height: 31.h,
+//                           ),
+//                           isLoadingNow
+//                               ? circle_progress()
+//                               : authButton(
+//                                   text: "Signup",
+//                                   func: () {
+//                                     FocusManager.instance.primaryFocus
+//                                         ?.unfocus();
+//                                     _validateFields();
+//                                   },
+//                                   color: AppColors.primaryColor),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
 //       ),
-//     ),
-//   ),
-//   child:  
-// Row(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // timeY6y (25:960)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 231.67*fem, 0*fem),
-//   child:  
-// Text(
-//   '4:05',
-//   textAlign:  TextAlign.center,
-//   style:  SafeGoogleFont (
-//     'Roboto',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w900,
-//     height:  1.1725*ffem/fem,
-//     letterSpacing:  -0.2800000012*fem,
-//     color:  Color(0xff000000),
-//   ),
-// ),
-// ),
-// Container(
-//   // cellularconnectionQey (25:954)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 5.03*fem, 3*fem),
-//   width:  17*fem,
-//   height:  10.67*fem,
-//   child:  
-// Image.network(
-//   [Image url]
-//   width:  17*fem,
-//   height:  10.67*fem,
-// ),
-// ),
-// Container(
-//   // wifiKmw (25:950)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 5.03*fem, 3.37*fem),
-//   width:  15.27*fem,
-//   height:  10.97*fem,
-//   child:  
-// Image.network(
-//   [Image url]
-//   width:  15.27*fem,
-//   height:  10.97*fem,
-// ),
-// ),
-// Container(
-//   // batteryQYV (25:946)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 3*fem),
-//   width:  24.33*fem,
-//   height:  11.33*fem,
-//   child:  
-// Image.network(
-//   [Image url]
-//   width:  24.33*fem,
-//   height:  11.33*fem,
-// ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // autogroupxajhvmj (57kQeFzC4JGKh8a1HtXAJh)
-//   padding:  EdgeInsets.fromLTRB(32*fem, 46*fem, 32*fem, 24*fem),
-//   width:  double.infinity,
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // parking147F (25:966)
-//   margin:  EdgeInsets.fromLTRB(32*fem, 0*fem, 0*fem, 53*fem),
-//   child:  
-// Center(
-//   // spotholder1cPf (25:1008)
-//   child:  
-// SizedBox(
-//   width:  251*fem,
-//   height:  55*fem,
-//   child:  
-// Image.network(
-//   [Image url]
-//   fit:  BoxFit.cover,
-// ),
-// ),
-// ),
-// ),
-// Container(
-//   // group94Z41 (25:970)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 23*fem),
-//   width:  double.infinity,
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // inputfieldhR7 (25:971)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 24*fem),
-//   width:  double.infinity,
-//   height:  58*fem,
-//   child:  
-// Stack(
-//   children:  [
-// Positioned(
-//   // group77dpZ (25:972)
-//   left:  0*fem,
-//   top:  18*fem,
-//   child:  
-// Container(
-//   padding:  EdgeInsets.fromLTRB(0*fem, 40*fem, 0*fem, 0*fem),
-//   width:  311*fem,
-//   height:  40*fem,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xffffffff),
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-// ),
-// ),
-// Positioned(
-//   // qamarhassnain4ey (25:975)
-//   left:  13*fem,
-//   top:  26.5*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  114*fem,
-//   height:  23*fem,
-//   child:  
-// Text(
-//   'Qamar Hassnain',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w400,
-//     height:  1.5999999728*ffem/fem,
-//     letterSpacing:  -0.200000003*fem,
-//     color:  Color(0xff5a5a7e),
-//   ),
-// ),
-// ),
-// ),
-// ),
-// Positioned(
-//   // firstnameMPB (25:976)
-//   left:  0*fem,
-//   top:  0*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  65*fem,
-//   height:  10*fem,
-//   child:  
-// Text(
-//   'First name',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  12*ffem,
-//     fontWeight:  FontWeight.w700,
-//     height:  0.8333333333*ffem/fem,
-//     letterSpacing:  -0.24*fem,
-//     color:  Color(0xff9595a7),
-//   ),
-// ),
-// ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // group95q3T (25:978)
-//   width:  double.infinity,
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.start,
-//   children:  [
-// Container(
-//   // usernameArR (25:983)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 8*fem),
-//   child:  
-// Text(
-//   'Username',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  12*ffem,
-//     fontWeight:  FontWeight.w700,
-//     height:  0.8333333333*ffem/fem,
-//     letterSpacing:  -0.24*fem,
-//     color:  Color(0xff9595a7),
-//   ),
-// ),
-// ),
-// Container(
-//   // group77Us7 (25:979)
-//   padding:  EdgeInsets.fromLTRB(0*fem, 8.5*fem, 0*fem, 0*fem),
-//   width:  double.infinity,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xffffffff),
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.start,
-//   children:  [
-// Container(
-//   // qamarhassnainQkm (25:982)
-//   margin:  EdgeInsets.fromLTRB(13*fem, 0*fem, 0*fem, 8.5*fem),
-//   child:  
-// Text(
-//   'qamar.hassnain',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w400,
-//     height:  1.5999999728*ffem/fem,
-//     letterSpacing:  -0.200000003*fem,
-//     color:  Color(0xff5a5a7e),
-//   ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-//   ],
-// ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // group9567o (25:984)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 24*fem),
-//   width:  double.infinity,
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // inputfieldqbB (25:985)
-//   width:  double.infinity,
-//   height:  58*fem,
-//   child:  
-// Stack(
-//   children:  [
-// Positioned(
-//   // group77Q8V (25:986)
-//   left:  0*fem,
-//   top:  18*fem,
-//   child:  
-// Container(
-//   padding:  EdgeInsets.fromLTRB(0*fem, 40*fem, 0*fem, 0*fem),
-//   width:  311*fem,
-//   height:  40*fem,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xffffffff),
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-// ),
-// ),
-// Positioned(
-//   // qamarhassnaingmailcom7ob (25:989)
-//   left:  13*fem,
-//   top:  26.5*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  196*fem,
-//   height:  23*fem,
-//   child:  
-// Text(
-//   'qamar.hassnain@gmail.com',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w400,
-//     height:  1.5999999728*ffem/fem,
-//     letterSpacing:  -0.200000003*fem,
-//     color:  Color(0xff5a5a7e),
-//   ),
-// ),
-// ),
-// ),
-// ),
-// Positioned(
-//   // emailyau (25:990)
-//   left:  0*fem,
-//   top:  0*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  35*fem,
-//   height:  10*fem,
-//   child:  
-// Text(
-//   'Email',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  12*ffem,
-//     fontWeight:  FontWeight.w700,
-//     height:  0.8333333333*ffem/fem,
-//     letterSpacing:  -0.24*fem,
-//     color:  Color(0xff9595a7),
-//   ),
-// ),
-// ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-// SizedBox(
-//   height:  24*fem,
-// ),
-// Container(
-//   // group95TFB (25:992)
-//   width:  double.infinity,
-//   height:  58*fem,
-//   child:  
-// Stack(
-//   children:  [
-// Positioned(
-//   // group77p5j (25:993)
-//   left:  0*fem,
-//   top:  18*fem,
-//   child:  
-// Container(
-//   padding:  EdgeInsets.fromLTRB(0*fem, 40*fem, 0*fem, 0*fem),
-//   width:  311*fem,
-//   height:  40*fem,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xffffffff),
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-// ),
-// ),
-// Positioned(
-//   // 981 (25:996)
-//   left:  13*fem,
-//   top:  28.5*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  149*fem,
-//   height:  23*fem,
-//   child:  
-// Text(
-//   '***********',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w400,
-//     height:  1.5999999728*ffem/fem,
-//     letterSpacing:  7.8000001907*fem,
-//     color:  Color(0xff5a5a7e),
-//   ),
-// ),
-// ),
-// ),
-// ),
-// Positioned(
-//   // passwordFRw (25:997)
-//   left:  0*fem,
-//   top:  0*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  60*fem,
-//   height:  10*fem,
-//   child:  
-// Text(
-//   'Password',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  12*ffem,
-//     fontWeight:  FontWeight.w700,
-//     height:  0.8333333333*ffem/fem,
-//     letterSpacing:  -0.24*fem,
-//     color:  Color(0xff9595a7),
-//   ),
-// ),
-// ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-// SizedBox(
-//   height:  24*fem,
-// ),
-// Container(
-//   // group95kdb (25:999)
-//   width:  double.infinity,
-//   height:  58*fem,
-//   child:  
-// Stack(
-//   children:  [
-// Positioned(
-//   // group77Wsf (25:1000)
-//   left:  0*fem,
-//   top:  18*fem,
-//   child:  
-// Container(
-//   padding:  EdgeInsets.fromLTRB(0*fem, 40*fem, 0*fem, 0*fem),
-//   width:  311*fem,
-//   height:  40*fem,
-//   decoration:  BoxDecoration (
-//     color:  Color(0xffffffff),
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-// ),
-// ),
-// Positioned(
-//   // bPK (25:1003)
-//   left:  13*fem,
-//   top:  28.5*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  149*fem,
-//   height:  23*fem,
-//   child:  
-// Text(
-//   '***********',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w400,
-//     height:  1.5999999728*ffem/fem,
-//     letterSpacing:  7.8000001907*fem,
-//     color:  Color(0xff5a5a7e),
-//   ),
-// ),
-// ),
-// ),
-// ),
-// Positioned(
-//   // confirmpasswordiD3 (25:1004)
-//   left:  0*fem,
-//   top:  0*fem,
-//   child:  
-// Align(
-//   child:  
-// SizedBox(
-//   width:  112*fem,
-//   height:  10*fem,
-//   child:  
-// Text(
-//   'Confirm Password',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  12*ffem,
-//     fontWeight:  FontWeight.w700,
-//     height:  0.8333333333*ffem/fem,
-//     letterSpacing:  -0.24*fem,
-//     color:  Color(0xff9595a7),
-//   ),
-// ),
-// ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // group32NYV (25:1005)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 38*fem, 10*fem),
-//   padding:  EdgeInsets.fromLTRB(0*fem, 0*fem, 9*fem, 0*fem),
-//   width:  double.infinity,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-//   child:  
-// Row(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // rectangle24tmj (25:1006)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 9*fem, 0*fem),
-//   width:  24*fem,
-//   height:  24*fem,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(4*fem),
-//     border:  Border.all(color Color(0xffcdd4dc)),
-//   ),
-// ),
-// Text(
-//   // iagreewithtermsandconditions2d (25:1007)
-//   'I agree with terms and conditions',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w500,
-//     height:  1.2175*ffem/fem,
-//     letterSpacing:  -0.2800000012*fem,
-//     color:  Color(0xff203d65),
-//   ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // group96Zss (226:667)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 38*fem, 11*fem),
-//   padding:  EdgeInsets.fromLTRB(0*fem, 0*fem, 56*fem, 0*fem),
-//   width:  double.infinity,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(4*fem),
-//   ),
-//   child:  
-// Row(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // rectangle24s7s (226:668)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 9*fem, 0*fem),
-//   width:  24*fem,
-//   height:  24*fem,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(4*fem),
-//     border:  Border.all(color Color(0xffcdd4dc)),
-//   ),
-// ),
-// Text(
-//   // becomeaproviderinsteadbZf (226:669)
-//   'Become a Provider instead',
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  14*ffem,
-//     fontWeight:  FontWeight.w500,
-//     height:  1.2175*ffem/fem,
-//     letterSpacing:  -0.2800000012*fem,
-//     color:  Color(0xff203d65),
-//   ),
-// ),
-//   ],
-// ),
-// ),
-// Container(
-//   // group29jfs (25:961)
-//   margin:  EdgeInsets.fromLTRB(6*fem, 0*fem, 5*fem, 0*fem),
-//   padding:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 18*fem),
-//   width:  double.infinity,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(16*fem),
-//   ),
-//   child:  
-// Column(
-//   crossAxisAlignment:  CrossAxisAlignment.center,
-//   children:  [
-// Container(
-//   // group31GZK (25:962)
-//   margin:  EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 18*fem),
-//   width:  double.infinity,
-//   height:  56*fem,
-//   decoration:  BoxDecoration (
-//     borderRadius:  BorderRadius.circular(16*fem),
-//     border:  Border (
-//     ),
-//     gradient:  RadialGradient (
-//       center:  Alignment(1, -0.75),
-//       radius:  0.99,
-//       colors:  <Color>[Color(0xff662d91), Color(0xff656cee)],
-//       stops:  <double>[0, 1],
-//     ),
-//   ),
-//   child:  
-// Center(
-//   child:  
-// Center(
-//   child:  
-// Text(
-//   'Sign up',
-//   textAlign:  TextAlign.center,
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  18*ffem,
-//     fontWeight:  FontWeight.w600,
-//     height:  1.2175*ffem/fem,
-//     letterSpacing:  -0.2800000012*fem,
-//     color:  Color(0xfff7f7fa),
-//   ),
-// ),
-// ),
-// ),
-// ),
-// Center(
-//   // alreadyhaveanaccountsigninhed (25:965)
-//   child:  
-// Text(
-//   'Already have an account? Sign in',
-//   textAlign:  TextAlign.center,
-//   style:  SafeGoogleFont (
-//     'Montserrat',
-//     fontSize:  16*ffem,
-//     fontWeight:  FontWeight.w500,
-//     height:  1.2175*ffem/fem,
-//     letterSpacing:  -0.2800000012*fem,
-//     decoration:  TextDecoration.underline,
-//     color:  Color(0xff8498b4),
-//     decorationColor:  Color(0xff8498b4),
-//   ),
-// ),
-// ),
-//   ],
-// ),
-// ),
-//   ],
-// ),
-// ),
-//   ],
-// ),
-// ),
-// ),
+//     );
+//   }
+
+//   void onIconPress() {
+//     setState(() {
+//       _obsecureText = !_obsecureText;
+//     });
+//   }
+
+//   Widget UploadProfile(Uint8List? image) {
+//     return image == null
+//         ? Stack(
+//             children: [
+//               // Image.network(
+//               //   "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png",
+//               //   height: 60,
+//               // ),
+//               Image.asset(
+//                 "asset/avatar.png",
+//                 height: 100.h,
+//                 width: 100.w,
+//               ),
+//               Positioned(
+//                 left: 45.w,
+//                 bottom: 0.h,
+//                 child: IconButton(
+//                   onPressed: () async {
+//                     Uint8List? _image = await utils.PickImage();
+//                     if (_image != null) {
+//                       setState(() {
+//                         _profileImage = _image;
+//                       });
+//                     } else {
+//                       debugPrint("Image not loaded");
+//                     }
+//                   },
+//                   icon: Container(
+//                     width: 36.w,
+//                     height: 36.h,
+//                     decoration: BoxDecoration(
+//                       color: AppColors.primaryColor,
+//                       borderRadius: BorderRadius.circular(50.r),
+//                     ),
+//                     child: Container(
+//                       width: 20.w,
+//                       height: 20.h,
+//                       child: Image.asset('asset/gallery.png'),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           )
+//         : Stack(
+//             children: [
+//               CircleAvatar(
+//                 minRadius: 50.r,
+//                 maxRadius: 50.r,
+//                 child: ClipOval(
+//                     child: Image.memory(
+//                   image,
+//                   height: 200.h,
+//                   width: 200.w,
+//                   fit: BoxFit.cover,
+//                 )),
+//                 // child: ,
+//               ),
+//               Positioned(
+//                 left: 45.w,
+//                 bottom: 0.h,
+//                 child: IconButton(
+//                   onPressed: () async {
+//                     Uint8List? _image = await utils.PickImage();
+//                     if (_image != null) {
+//                       setState(() {
+//                         image = _image;
+//                       });
+//                     }
+//                     debugPrint("Image not loaded");
+//                   },
+//                   icon: Container(
+//                     width: 36.w,
+//                     height: 36.h,
+//                     decoration: BoxDecoration(
+//                       color: AppColors.primaryColor,
+//                       borderRadius: BorderRadius.circular(50.r),
+//                     ),
+//                     child: Container(
+//                       width: 20.w,
+//                       height: 20.h,
+//                       child: Image.asset('asset/gallery.png'),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           );
+//   } // for 1st image
+// }

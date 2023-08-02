@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/user/booking.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
+import 'package:spot_holder/presentation/user/wallet.dart';
 import '../../style/images.dart';
 import '../../style/styling.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,7 +16,8 @@ class UserNavigation extends StatefulWidget {
 class _UserNavigationState extends State<UserNavigation> {
   List pages = [
     UserHomepage(),
-    // DonateFood(),
+    Booking(),
+    Wallet()
     // const DonarDonationsScreen(),
     // const DonarSetting(),
   ];
@@ -30,7 +33,7 @@ class _UserNavigationState extends State<UserNavigation> {
   @override
   Widget build(BuildContext context) {
     SizedBox k = SizedBox(
-      height: 10.w,
+      width: 30.w,
     );
     return Scaffold(
         // backgroundColor: Styling.primaryColor,
@@ -69,7 +72,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();   
+                              currentScreen = Booking();
                               currentindex = 1;
                             });
                           },
@@ -87,7 +90,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = Wallet();
                               currentindex = 2;
                             });
                           },

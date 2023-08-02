@@ -3,9 +3,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:spot_holder/presentation/user/booking.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
 import 'package:spot_holder/presentation/user/user_login.dart';
+import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/presentation/user/user_signup.dart';
+import 'package:spot_holder/presentation/user/wallet.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/utils/routes/routes.dart';
 
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: UserHomepage(),
+            home:UserNavigation(),
             onGenerateRoute: Routes.onGenerateRoute,
           ),
         );

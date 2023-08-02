@@ -26,7 +26,11 @@ class UserHomepage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HomeHeader(height: 180.h),
+            HomeHeader(
+              height: 180.h,
+              text: "Hi Qamar",
+              barTitle: "Home",
+            ),
             SizedBox(
               height: 20.h,
             ),
@@ -69,5 +73,4 @@ class UserHomepage extends StatelessWidget {
       ),
     ));
   }
-
 }

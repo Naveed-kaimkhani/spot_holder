@@ -1,3 +1,4 @@
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,6 +42,9 @@ class ReservedParkingHeader extends StatelessWidget {
               "Paratha 09, Naseem Nagar",
               style: CustomTextStyle.font_14_black,
             ),
+            SizedBox(
+              height: 4.h,
+            ),
             Row(
               children: [
                 Text(
@@ -51,6 +55,9 @@ class ReservedParkingHeader extends StatelessWidget {
                   width: 20.w,
                 ),
                 SvgPicture.asset(Images.pointer),
+                SizedBox(
+                  width: 4.w,
+                ),
                 Text(
                   "700m",
                   style: CustomTextStyle.font_12_grey,

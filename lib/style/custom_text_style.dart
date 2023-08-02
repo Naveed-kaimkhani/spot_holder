@@ -19,9 +19,21 @@ class CustomTextStyle {
     fontWeight: FontWeight.w700,
   );
 
+  static final font_18_grey = TextStyle(
+    color: Color(0xFF9695A8),
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+  );
+
   static final font_18_primary = TextStyle(
     color: Styling.primaryColor,
     fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static final font_12_primary = TextStyle(
+    color: Styling.primaryColor,
+    fontSize: 12.sp,
     fontWeight: FontWeight.w700,
   );
 
@@ -36,13 +48,12 @@ class CustomTextStyle {
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
   );
-  
+
   static final font_12_grey = TextStyle(
-    color:  Color(0xFFA5AAB7),
+    color: Color(0xFF9695A8),
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
   );
-  
 
   static final font_22 = TextStyle(
     color: Colors.white,
