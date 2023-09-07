@@ -5,10 +5,15 @@ class AuthButton extends StatelessWidget {
   final String? text;
   final Function()? func;
   final Color? color;
+  final double height;
+  
+  final double widht;
   const AuthButton({
     required this.text,
     required this.func,
     required this.color,
+    required this.height,
+    required this.widht,
     Key? key,
   }) : super(key: key);
 
@@ -17,8 +22,8 @@ class AuthButton extends StatelessWidget {
     return InkWell(
       onTap: func,
       child: Container(
-        width: 277.w,
-        height: 50.h,
+        width: widht,
+        height: height,
         decoration: BoxDecoration(
           // color: color,
           gradient: const LinearGradient(

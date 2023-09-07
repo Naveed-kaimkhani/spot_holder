@@ -4,18 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/widget/time_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spot_holder/utils/utils.dart';
+import 'package:provider/provider.dart';
 
+import '../../Domain/models/reserved_parking_model.dart';
+import '../../Domain/models/user_model.dart';
 import '../../main.dart';
+import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/images.dart';
 
 class ReservedParkingHeader extends StatelessWidget {
+ final ReservedParkingModel parking;
   const ReservedParkingHeader({
+   required this.parking,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+   
+   UserModel?   user = Provider.of<UserProvider>(context, listen: false).user;
     return Container(
       height: 180.h,
       width: mq.width,
@@ -39,7 +48,7 @@ class ReservedParkingHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Paratha 09, Naseem Nagar",
+              parking.parkingAddress!,
               style: CustomTextStyle.font_14_black,
             ),
             SizedBox(
@@ -59,7 +68,7 @@ class ReservedParkingHeader extends StatelessWidget {
                   width: 4.w,
                 ),
                 Text(
-                  "700m",
+                 utils.getDistancebtwSourceNDestination(user!.lat!, user.long!, parking.locationLat!,parking.locationLong!).toString(),
                   style: CustomTextStyle.font_12_grey,
                 ),
               ],
@@ -67,15 +76,15 @@ class ReservedParkingHeader extends StatelessWidget {
             SizedBox(
               height: 23.h,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TimeWidget(
-                  time: "1:30 PM",
-                  date: "6 Feb, 2023",
+                  time:parking.reservedTime!,
+                  date: parking.reservedDate!,
                 ),
                 TimeWidget(
-                  time: "1:30 PM",
+                  time: parking.durationDate!,
                   date: "6 Feb, 2023",
                   charges: 60,
                 ),

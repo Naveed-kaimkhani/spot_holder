@@ -4,30 +4,85 @@ import 'package:spot_holder/presentation/widget/custom_app_bar.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
+import 'package:spot_holder/utils/utils.dart';
+
+import 'package:provider/provider.dart';
+import '../../Data/FirebaseUserRepository.dart';
+import '../../Domain/models/parking_model.dart';
+import '../../Domain/models/reserved_parking_model.dart';
+import '../../Domain/models/user_model.dart';
+import '../../provider/user_provider.dart';
 import '../../style/styling.dart';
+import '../../utils/custom_loader.dart';
 import '../widget/decor.dart';
 
-class Booking extends StatelessWidget {
-  Booking({super.key});
-  final List<Widget> listOfPlans = [
-    const PlansWidget(
-      time: '1hr - 2hrs:  ',
-      price: '30 PKR',
-    ),
-    const PlansWidget(
-      time: '3hr - 4hrs:  ',
-      price: '50 PKR',
-    ),
-    const PlansWidget(
-      time: '1hr - 2hrs:  ',
-      price: '30 PKR',
-    )
+class Booking extends StatefulWidget {
+  final ParkingModel parking;
+  Booking({super.key, required this.parking});
+
+  @override
+  State<Booking> createState() => _BookingState();
+}
+
+class _BookingState extends State<Booking> {
+  final List<String> listOfPrice = [
+    '1hr - 2hrs: 30 PKR',
+    '3hr - 4hrs: 50 PKR',
+    '4hr - 6hrs: 80 PKR',
   ];
+
+  int currentIndex = 0;
+  int selectedValue = 1;
+
+  String splitStringFromColon(String text, int part) {
+    List<String> parts = text.split(':');
+    if (parts.length > 1) {
+      return parts[part].trim();
+    }
+    return '';
+  }
+
+  String getNumericValue(String input) {
+    // Remove non-digit characters from the input
+    String numericValue = input.replaceAll(RegExp(r'[^0-9]'), '');
+    return numericValue;
+  }
+
+  _bookParking() async {
+    LoaderOverlay.show(context);
+    ReservedParkingModel parkingModel = ReservedParkingModel(
+      userUid: utils.currentUserUid,
+      parkingDocumentId: widget.parking.documentId,
+      locationLat: widget.parking.locationLat,
+      locationLong: widget.parking.locationLong,
+      parkingId: widget.parking.parkingId,
+      price: widget.parking.price,
+      bookedSlots: selectedValue,
+      parkingAddress: widget.parking.parkingAddress,
+      reservedDate: utils.getCurrentDate(),
+      reservedTime: utils.getCurrentTime(),
+      // durationDate: ,
+      durationTime: "${splitStringFromColon(listOfPrice[currentIndex], 0)}",
+      ownerDeviceToken: widget.parking.ownerDeviceToken,
+
+    );
+
+    await FirebaseUserRepository.bookParkingModelToFirestore(
+        parkingModel, context);
+await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.parking.availableSlots!,selectedValue, context);
+    LoaderOverlay.hide();
+  }
+
   @override
   Widget build(BuildContext context) {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+    double distance = utils.getDistancebtwSourceNDestination(user!.lat!,
+        user.long!, widget.parking.locationLat!, widget.parking.locationLong!);
     return SafeArea(
       child: Scaffold(
-        appBar: const custom_appbar(title: "check out",),
+        appBar: const custom_appbar(
+          title: "check out",
+        ),
         body: Stack(
           children: [
             Container(
@@ -55,7 +110,8 @@ class Booking extends StatelessWidget {
                             height: 6.h,
                           ),
                           Text(
-                            "Restaurant, Paratha 09",
+                            utils.trimAddressToHalf(
+                                widget.parking.parkingAddress!),
                             style: CustomTextStyle.font_12_grey,
                           ),
                           SizedBox(
@@ -68,11 +124,30 @@ class Booking extends StatelessWidget {
                                 text: "Car sports",
                               ),
                               SizedBox(
+                                width: 12.w,
+                              ),
+                              DropdownButton<int>(
+                                value: selectedValue,
+                                onChanged: (int? newValue) {
+                                  setState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                                items: List<DropdownMenuItem<int>>.generate(5,
+                                    (index) {
+                                  return DropdownMenuItem<int>(
+                                    value: index + 1,
+                                    child: Text('${index + 1}'),
+                                  );
+                                }),
+                              ),
+                              SizedBox(
                                 width: 27.w,
                               ),
-                              const CarIcon(
+                              CarIcon(
                                 icon: Icons.location_on_outlined,
-                                text: "2 km",
+                                text:
+                                    "${(distance / 1000).toString().substring(0, (distance.toString().length / 3).toInt())} km",
                               ),
                             ],
                           ),
@@ -122,9 +197,27 @@ class Booking extends StatelessWidget {
                             height: 50.h,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: listOfPlans.length,
+                                itemCount: listOfPrice.length,
                                 itemBuilder: (context, index) {
-                                  return listOfPlans[index];
+                                  bool isSelected = index ==
+                                      currentIndex; // Change to your desired color
+
+                                  return InkWell(
+                                    child: PlansWidget(
+                                      price: splitStringFromColon(
+                                          listOfPrice[index], 1),
+                                      time: splitStringFromColon(
+                                          listOfPrice[index], 0),
+                                      color: isSelected
+                                          ? Styling.primaryColor
+                                          : Colors.grey,
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        currentIndex = index;
+                                      });
+                                    },
+                                  );
                                 }),
                           ),
                           SizedBox(
@@ -143,7 +236,7 @@ class Booking extends StatelessWidget {
                               children: [
                                 Icon(Icons.location_on_outlined),
                                 Text(
-                                  "28 slot Available",
+                                  "${widget.parking.availableSlots} slot Available",
                                   style: CustomTextStyle.font_12_primary,
                                 ),
                                 Container(
@@ -162,21 +255,28 @@ class Booking extends StatelessWidget {
                                       end: Alignment.centerLeft,
                                     ),
                                   ),
-                                  child: Center(
+                                  child: InkWell(
                                     child: Text.rich(TextSpan(
                                         text: "Reserve for  ",
                                         style: CustomTextStyle.font_14,
                                         children: <InlineSpan>[
                                           TextSpan(
-                                            text: "60 PKR ",
+                                            text:
+                                                "${(int.parse(getNumericValue(splitStringFromColon(listOfPrice[currentIndex], 1))) * selectedValue)} PKR",
+
+                                            // text:
+                                            //     "${int.parse(getNumericValue(splitStringFromColon(listOfPrice[currentIndex], 1) * selectedValue))}",
                                             style: CustomTextStyle.font_18,
                                           ),
                                           TextSpan(
                                             text:
-                                                "\n                       3hr - 4hrs",
+                                                "\n                       ${splitStringFromColon(listOfPrice[currentIndex], 0)}",
                                             style: CustomTextStyle.font_14,
                                           )
                                         ])),
+                                    onTap: () async {
+                                      await _bookParking();
+                                    },
                                   ),
                                 )
                               ],
@@ -196,12 +296,41 @@ class Booking extends StatelessWidget {
   }
 }
 
+// class MyDropdownButton extends StatefulWidget {
+
+//   @override
+//   _MyDropdownButtonState createState() => _MyDropdownButtonState();
+// }
+
+// class _MyDropdownButtonState extends State<MyDropdownButton> {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return DropdownButton<int>(
+//       value: selectedValue,
+//       onChanged: (int? newValue) {
+//         setState(() {
+//           selectedValue = newValue!;
+//         });
+//       },
+//       items: List<DropdownMenuItem<int>>.generate(5, (index) {
+//         return DropdownMenuItem<int>(
+//           value: index + 1,
+//           child: Text('${index + 1}'),
+//         );
+//       }),
+//     );
+//   }
+// }
+
 class PlansWidget extends StatelessWidget {
   final String time;
   final String price;
+  final Color color;
   const PlansWidget({
     required this.price,
     required this.time,
+    required this.color,
     super.key,
   });
 
@@ -213,7 +342,7 @@ class PlansWidget extends StatelessWidget {
       margin: EdgeInsets.only(right: 14.w),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.grey, // Border color (grey color in this case)
+          color: color, // Border color (grey color in this case)
           width: 1.0, // Border width (you can adjust this as needed)
         ),
         borderRadius: BorderRadius.circular(

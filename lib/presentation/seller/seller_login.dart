@@ -2,30 +2,35 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/seller/seller_navigation.dart';
 import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/presentation/widget/auth_button.dart';
 import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:spot_holder/style/images.dart';
+import 'package:spot_holder/utils/routes/routes_name.dart';
 import 'package:spot_holder/utils/utils.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../style/styling.dart';
 import '../../Data/FirebaseUserRepository.dart';
 import '../../Domain/models/user_model.dart';
+import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/storage_services.dart';
 import '../widget/auth_header.dart';
 import '../widget/custom_divider.dart';
 import '../widget/input_field.dart';
 
-class UserLogin extends StatefulWidget {
-  const UserLogin({Key? key}) : super(key: key);
+class SellerLogin extends StatefulWidget {
+  const SellerLogin({Key? key}) : super(key: key);
 
   @override
-  State<UserLogin> createState() => _UserLoginState();
+  State<SellerLogin> createState() => _SellerLoginState();
 }
 
-class _UserLoginState extends State<UserLogin> {
+class _SellerLoginState extends State<SellerLogin> {
   final FirebaseUserRepository _firebaseRepository = FirebaseUserRepository();
   final _formKey = GlobalKey<FormState>();
 
@@ -58,7 +63,7 @@ class _UserLoginState extends State<UserLogin> {
     isLoading(true);
     _firebaseRepository
         // .login(_emailController.text, _passwordController.text, context)
-        .login("kkk@gmail.com", "111111", context)
+        .login("seller@gmail.com", "111111", context)
         .then((User? user) async {
       if (user != null) {
         //  final   currentLocation = await Geolocator.getCurrentPosition();
@@ -71,14 +76,16 @@ class _UserLoginState extends State<UserLogin> {
   }
 
   void _getUserDetails() async {
-    _firebaseRepository.getUser().then((UserModel? userModel) async {
+    _firebaseRepository.getSeller().then((UserModel? userModel) async {
       if (userModel != null) {
-        await _firebaseRepository.loadUserDataOnAppInit(context);
+        // await _firebaseRepository.loadUserDataOnAppInit(context);
+        await Provider.of<UserProvider>(context, listen: false)
+            .getSellerFromServer(context);
 
-        await StorageService.initUser();
+        // await StorageService.initUser();
         isLoading(false);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => UserNavigation()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => SellerNavigation()));
       } else {
         isLoading(false);
         utils.flushBarErrorMessage("User is null", context);
@@ -215,7 +222,9 @@ class _UserLoginState extends State<UserLogin> {
                     height: 56.h,
                     widht: 300.w,
                     text: "SignUp",
-                    func: () {},
+                    func: () {
+                      Navigator.pushNamed(context, RoutesName.sellerSignup);
+                    },
                     color: Styling.primaryColor,
                   ),
                   Padding(

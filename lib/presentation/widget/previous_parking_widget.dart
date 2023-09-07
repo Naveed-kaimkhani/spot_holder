@@ -1,16 +1,19 @@
-
 import 'package:flutter/material.dart';
+import 'package:spot_holder/Domain/models/parking_model.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spot_holder/utils/utils.dart';
 
 import '../../style/images.dart';
 import '../../style/styling.dart';
 import 'home_headers_decoration.dart';
 
 class PreviousParkingWidget extends StatelessWidget {
+  final ParkingModel parking;
   const PreviousParkingWidget({
     super.key,
+    required this.parking,
   });
 
   @override
@@ -28,11 +31,11 @@ class PreviousParkingWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Bypass, Hyderabad",
+                  utils.trimAddressToHalf(parking.parkingAddress!),
                   style: CustomTextStyle.font_12_grey,
                 ),
                 Text(
-                  "60 pkr",
+                  "${parking.price} pkr",
                   style: CustomTextStyle.font_18_primary,
                 ),
               ],
@@ -41,7 +44,7 @@ class PreviousParkingWidget extends StatelessWidget {
               height: 5.h,
             ),
             Text(
-              "Abdullah Mall",
+              utils.trimAddressToHalf(parking.parkingAddress!),
               style: CustomTextStyle.font_18_black,
             ),
             SizedBox(
@@ -51,11 +54,11 @@ class PreviousParkingWidget extends StatelessWidget {
               children: [
                 SvgPicture.asset(Images.spot),
                 Text(
-                  "Spot no. 17",
+                  " Spots ${parking.availableSlots}",
                   style: CustomTextStyle.font_12_grey,
                 ),
                 SizedBox(
-                  width: 60.w,
+                  width: 82.w,
                   // height: 8.h,
                 ),
                 const Icon(

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/seller/seller_homepage.dart';
 import 'package:spot_holder/presentation/user/booking.dart';
-import 'package:spot_holder/presentation/user/parking_spots_onMap.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
 import 'package:spot_holder/presentation/user/wallet.dart';
 import '../../style/images.dart';
 import '../../style/styling.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class UserNavigation extends StatefulWidget {
-  const UserNavigation({Key? key}) : super(key: key);
+class SellerNavigation extends StatefulWidget {
+  const SellerNavigation({Key? key}) : super(key: key);
   @override
-  State<UserNavigation> createState() => _UserNavigationState();
+  State<SellerNavigation> createState() => _SellerNavigationState();
 }
 
-class _UserNavigationState extends State<UserNavigation> {
+class _SellerNavigationState extends State<SellerNavigation> {
   List pages = [
-    UserHomepage(),
-    ParkingSpotsOnMap(),
+    SellerHomepage(),
+    Wallet(),
     Wallet()
     // const DonarDonationsScreen(),
     // const DonarSetting(),
@@ -30,7 +30,7 @@ class _UserNavigationState extends State<UserNavigation> {
   }
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = UserHomepage();
+  Widget currentScreen = SellerHomepage();
   @override
   Widget build(BuildContext context) {
     SizedBox k = SizedBox(
@@ -55,7 +55,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = SellerHomepage();
                               currentindex = 0;
                             });
                           },
@@ -73,12 +73,12 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = ParkingSpotsOnMap();
+                              currentScreen = Wallet();
                               currentindex = 1;
                             });
                           },
                           child: SvgPicture.asset(
-                            Images.dashboard,
+                            Images.fat,
                             height: 26.h,
                             width: 26.w,
                             colorFilter: ColorFilter.mode(
@@ -109,7 +109,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = SellerHomepage();
                               currentindex = 3;
                             });
                           },

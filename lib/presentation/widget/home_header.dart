@@ -12,13 +12,13 @@ import 'custom_app_bar.dart';
 class HomeHeader extends StatelessWidget {
   final String? text;
   final String barTitle;
-  
+
   final double height;
   // final TextStyle style;
   HomeHeader({
     Key? key,
     this.text,
-   required this.barTitle,
+    required this.barTitle,
     // required this.style,
     required this.height,
   }) : super(key: key);
@@ -28,7 +28,7 @@ class HomeHeader extends StatelessWidget {
     return Container(
       height: height,
       width: mq.width,
-      padding: EdgeInsets.only(left: 16.w, top: 20.h, right: 16.w),
+      padding: EdgeInsets.only(left: 16.w, top: 10.h, right: 16.w),
       decoration: BoxDecoration(
         color: Styling.primaryColor,
         borderRadius: BorderRadius.only(
@@ -46,14 +46,14 @@ class HomeHeader extends StatelessWidget {
           SizedBox(
             height: 25.h,
           ),
-          if(text!=null)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              text??"",
-              style: CustomTextStyle.font_22,
+          if (text != null)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                text ?? "",
+                style: CustomTextStyle.font_22,
+              ),
             ),
-          ),
         ],
       ),
     );

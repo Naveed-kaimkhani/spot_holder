@@ -3,10 +3,8 @@ import 'dart:typed_data';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:spot_holder/Domain/models/rider_model.dart';
-import 'package:spot_holder/Domain/models/user_model.dart';
+import 'package:spot_holder/presentation/seller/seller_navigation.dart';
 import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/utils/utils.dart';
 import '../../Data/FirebaseUserRepository.dart';
@@ -21,14 +19,16 @@ import '../widget/auth_button.dart';
 import '../widget/circle_progress.dart';
 import '../widget/input_field.dart';
 
-class UserSignUp extends StatefulWidget {
-  const UserSignUp({Key? key}) : super(key: key);
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+class SellerSignUp extends StatefulWidget {
+  const SellerSignUp({Key? key}) : super(key: key);
 
   @override
-  State<UserSignUp> createState() => _UserSignUpState();
+  State<SellerSignUp> createState() => _SellerSignUpState();
 }
 
-class _UserSignUpState extends State<UserSignUp> {
+class _SellerSignUpState extends State<SellerSignUp> {
   final FirebaseUserRepository _firebaseUserRepository =
       FirebaseUserRepository();
   final _formKey = GlobalKey<FormState>();
@@ -113,18 +113,15 @@ class _UserSignUpState extends State<UserSignUp> {
 
   void _saveUser(User firebaseUser, RiderModel userModel) {
     _firebaseUserRepository
-        .saveUserDataToFirestore(userModel)
+        .saveSellerDataToFirestore(userModel)
         .then((value) async {
       await Provider.of<UserProvider>(context, listen: false)
-          .getUserFromServer(context);
+          .getSellerFromServer(context);
 
-      // await _firebaseUserRepository.loadUserDataOnAppInit(context);
-
-      await StorageService.initUser();
 
       isLoading(false);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => UserNavigation()));
+          context, MaterialPageRoute(builder: (context) => SellerNavigation()));
     }).catchError((error) {
       isLoading(false);
       utils.flushBarErrorMessage(error.toString(), context);
@@ -284,9 +281,8 @@ class _UserSignUpState extends State<UserSignUp> {
                   isLoadingNow
                       ? const CircleProgress()
                       : AuthButton(
-                        
-                          height: 56.h,
-                          widht: 300.w,
+                        height: 56.h,
+                        widht: 300.w,
                           text: "Signup",
                           func: () {
                             FocusManager.instance.primaryFocus?.unfocus();

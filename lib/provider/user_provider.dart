@@ -27,4 +27,15 @@ class UserProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future getSellerFromServer(context) async {
+   _userDetails = await firebaseRepository.getSeller();
+
+    if (_userDetails == null) {
+  
+      utils.flushBarErrorMessage("No user found",context);
+    }
+    notifyListeners();
+  }
+
 }

@@ -1,26 +1,44 @@
+import 'dart:io';
 import 'dart:math';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'dart:ui' as ui;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui' as ui;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:another_flushbar/flushbar.dart';
-import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:another_flushbar/flushbar_route.dart';
 
 import '../presentation/no_internet_connection.dart';
-import '../presentation/widget/circle_progress.dart';
+
 class utils {
   static toastMessage(String message) {
     Fluttertoast.showToast(msg: message);
+  }
+  
+  static Future<XFile> compressImage(XFile image) async {
+    final dir = await path_provider.getTemporaryDirectory();
+    final targetPath = '${dir.absolute.path}/temp.jpg';
+
+    // converting original image to compress it
+    final result = await FlutterImageCompress.compressAndGetFile(
+      image.path,
+      targetPath,
+      minHeight: 1080, //you can play with this to reduce siz
+      minWidth: 1080,
+      quality: 90, // keep this high to get the original quality of image
+    );
+    return result!;
   }
 
   static String getCurrentDate() {
@@ -104,26 +122,7 @@ class utils {
 
 static String get currentUserUid => FirebaseAuth.instance.currentUser!.uid;
 
-  static hideLoading() {
-    Navigator.pop(dialogContext);
-  }
 
-  static late BuildContext dialogContext;
-  static showLoading(context) {
-    // showDialog(context: context, builder: builder)
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          // The background color
-          backgroundColor: Colors.white,
-          child: CircleProgress(),
-        );
-      },
-    );
-  }
 
   static String getFriendlyErrorMessage(dynamic error) {
     // Check for specific error conditions and return appropriate messages
@@ -349,4 +348,21 @@ static String get currentUserUid => FirebaseAuth.instance.currentUser!.uid;
     }
     return 'NA';
   }
+
+  static String trimAddressToHalf(String address) {
+    int halfLength = (address.length / 3).floor();
+    return address.substring(0, halfLength);
+  }
+ static double getDistancebtwSourceNDestination(
+    double sourceLat,
+    double sourceLong,
+    double destinationLat,
+    double destinationLong,
+  
+  ) {
+    return Geolocator.distanceBetween(sourceLat, sourceLong,
+        destinationLat, destinationLong);
+  }
+
 }
+

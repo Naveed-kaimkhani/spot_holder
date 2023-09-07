@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 
-import '../style/styling.dart';
+import '../../style/styling.dart';
 
 class NoInternetCnnection extends StatefulWidget {
   const NoInternetCnnection({Key? key}) : super(key: key);
@@ -13,7 +13,6 @@ class NoInternetCnnection extends StatefulWidget {
 }
 
 class _NoInternetCnnectionState extends State<NoInternetCnnection> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +22,10 @@ class _NoInternetCnnectionState extends State<NoInternetCnnection> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-              child: Image.asset(
-                "assets/no.png",
-                height: 250.h,
-                width: 250.w,
+              child: Lottie.asset(
+                "assets/no.json",
+                height: 300.h,
+                width: 300.w,
               ),
             ),
             SizedBox(
