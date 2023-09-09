@@ -131,18 +131,16 @@ class _AddNewParkingState extends State<AddNewParking> {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _locationController.dispose();
-    _numberOfSlotsController.dispose();
-    _nameController.dispose();
-    _locationController.dispose();
-    _numberOfSlotsController.dispose();
-// _numberOfSlotsController.dispose();
-    _numberOfSlotsFocusNode.dispose();
     nameFocusNode.dispose();
-    _priceController.dispose();
-    _priceFocusNode.dispose();
     locationFocusNode.dispose();
+    _numberOfSlotsFocusNode.dispose();
+    _priceFocusNode.dispose();
+    descriptionFocusNode.dispose();
+    _priceController.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
+    _numberOfSlotsController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -172,7 +170,7 @@ class _AddNewParkingState extends State<AddNewParking> {
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<UserProvider>(context, listen: false).user;
+    user = Provider.of<UserProvider>(context, listen: false).seller;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -186,6 +184,7 @@ class _AddNewParkingState extends State<AddNewParking> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BackButton(),
                   Center(
                     child: Image.asset(
                       Images.logo,

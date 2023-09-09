@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:spot_holder/Domain/models/reserved_parking_model.dart';
 import 'package:spot_holder/Domain/models/user_model.dart';
+import 'package:spot_holder/presentation/user/user_parking_direction.dart';
 import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/widget/previous_parking_widget.dart';
@@ -11,13 +12,9 @@ import 'package:spot_holder/style/custom_text_style.dart';
 import 'package:spot_holder/style/styling.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-
 import '../../Data/FirebaseUserRepository.dart';
-import '../../main.dart';
-import '../../style/images.dart';
 import '../no_data_found.dart';
 import '../widget/circle_progress.dart';
-import '../widget/home_headers_decoration.dart';
 import '../widget/reserved_parking_header.dart';
 
 class UserHomepage extends StatelessWidget {
@@ -36,7 +33,7 @@ class UserHomepage extends StatelessWidget {
           children: [
             HomeHeader(
               height: 180.h,
-              text: "Hi Qamar",
+              text: "Hi ${user!.name}",
               barTitle: "Home",
             ),
             SizedBox(
@@ -68,10 +65,20 @@ class UserHomepage extends StatelessWidget {
                 } else {
                   return ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return ReservedParkingHeader(
-                            parking: snapshot.data![index]);
+                        return InkWell(
+                          child: ReservedParkingHeader(
+                              parking: snapshot.data![index]),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserParkingTraking(
+                                        parkingModel: snapshot.data![index])));
+                          },
+                        );
                       });
                 }
               },

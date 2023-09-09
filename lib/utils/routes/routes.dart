@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:spot_holder/presentation/seller/add_new_parking.dart';
 import 'package:spot_holder/presentation/seller/seller_sign.dart';
+import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
 
 import '../../presentation/user/user_login.dart';
@@ -16,6 +16,8 @@ class Routes {
       case RoutesName.addNewParking:
         return _buildRoute(const AddNewParking(), settings);
 
+      case RoutesName.userNavigation:
+        return _buildRoute(const UserNavigation(), settings);
 
       // case RoutesName.trackDonation:
       //   return _buildRoute( TrackDonation(), settings);

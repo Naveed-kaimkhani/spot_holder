@@ -15,7 +15,7 @@ class NoDataFoundScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset("assets/no_data.json", height: 350.h, width: 350.w),
+          Lottie.asset("assets/no_data.json", height: 320.h, width: 320.w),
           Text(text)
         ],
       ),

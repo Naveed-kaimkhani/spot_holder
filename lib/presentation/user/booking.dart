@@ -4,6 +4,7 @@ import 'package:spot_holder/presentation/widget/custom_app_bar.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
+import 'package:spot_holder/utils/routes/routes_name.dart';
 import 'package:spot_holder/utils/utils.dart';
 
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import '../../Data/FirebaseUserRepository.dart';
 import '../../Domain/models/parking_model.dart';
 import '../../Domain/models/reserved_parking_model.dart';
 import '../../Domain/models/user_model.dart';
+import '../../Domain/transaction.dart';
 import '../../provider/user_provider.dart';
 import '../../style/styling.dart';
 import '../../utils/custom_loader.dart';
@@ -25,15 +27,10 @@ class Booking extends StatefulWidget {
 }
 
 class _BookingState extends State<Booking> {
-  final List<String> listOfPrice = [
-    '1hr - 2hrs: 30 PKR',
-    '3hr - 4hrs: 50 PKR',
-    '4hr - 6hrs: 80 PKR',
-  ];
-
   int currentIndex = 0;
   int selectedValue = 1;
-
+  List<String>? listOfPrice;
+  UserModel? user;
   String splitStringFromColon(String text, int part) {
     List<String> parts = text.split(':');
     if (parts.length > 1) {
@@ -49,6 +46,8 @@ class _BookingState extends State<Booking> {
   }
 
   _bookParking() async {
+    final myContext = context; // Capture the BuildContext
+
     LoaderOverlay.show(context);
     ReservedParkingModel parkingModel = ReservedParkingModel(
       userUid: utils.currentUserUid,
@@ -56,28 +55,65 @@ class _BookingState extends State<Booking> {
       locationLat: widget.parking.locationLat,
       locationLong: widget.parking.locationLong,
       parkingId: widget.parking.parkingId,
-      price: widget.parking.price,
+      price: (int.parse(getNumericValue(
+              splitStringFromColon(listOfPrice![currentIndex], 1))) *
+          selectedValue),
       bookedSlots: selectedValue,
       parkingAddress: widget.parking.parkingAddress,
       reservedDate: utils.getCurrentDate(),
       reservedTime: utils.getCurrentTime(),
       // durationDate: ,
-      durationTime: "${splitStringFromColon(listOfPrice[currentIndex], 0)}",
+      durationTime: splitStringFromColon(listOfPrice![currentIndex], 0),
       ownerDeviceToken: widget.parking.ownerDeviceToken,
-
     );
+
+    TransactionModel model = TransactionModel(
+      senderUid: utils.currentUserUid,
+      receiverUid: widget.parking.ownerUid,
+      senderName: user!.name,
+      receiverName: widget.parking.ownerName,
+      transactionDate: utils.getCurrentDate(),
+      transactionTime: utils.getCurrentTime(),
+      payment: (int.parse(getNumericValue(
+              splitStringFromColon(listOfPrice![currentIndex], 1))) *
+          selectedValue),
+    );
+    final initialBalance = user!.balance;
+    final userUpdatedbalance = initialBalance! -
+        (int.parse(getNumericValue(
+                splitStringFromColon(listOfPrice![currentIndex], 1))) *
+            selectedValue);
 
     await FirebaseUserRepository.bookParkingModelToFirestore(
         parkingModel, context);
-await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.parking.availableSlots!,selectedValue, context);
+
+    await FirebaseUserRepository.updateSlots(widget.parking.documentId!,
+        widget.parking.availableSlots!, selectedValue, myContext);
+
+    await FirebaseUserRepository.updateBalance(utils.currentUserUid,
+        userUpdatedbalance, model.payment!, widget.parking.ownerUid!, context);
+    await FirebaseUserRepository.saveTransaction(model, context);
+    await Provider.of<UserProvider>(context, listen: false)
+        .getUserFromServer(context);
+    // Navigator.pushNamed(context, RoutesName.userNavigation);
     LoaderOverlay.hide();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
-    double distance = utils.getDistancebtwSourceNDestination(user!.lat!,
-        user.long!, widget.parking.locationLat!, widget.parking.locationLong!);
+    var price = widget.parking.price;
+    var multipliedByTwo = price! * 2;
+    var multipliedByThree = price * 3;
+
+    listOfPrice = [
+      '1hr - 2hrs:${widget.parking.price} PKR',
+      '3hr - 4hrs:$multipliedByTwo PKR',
+      '4hr - 6hrs:$multipliedByThree PKR',
+    ];
+
+    user = Provider.of<UserProvider>(context, listen: false).user;
+    String distance = utils.getDistancebtwSourceNDestination(user!.lat!,
+        user!.long!, widget.parking.locationLat!, widget.parking.locationLong!);
     return SafeArea(
       child: Scaffold(
         appBar: const custom_appbar(
@@ -146,8 +182,7 @@ await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.park
                               ),
                               CarIcon(
                                 icon: Icons.location_on_outlined,
-                                text:
-                                    "${(distance / 1000).toString().substring(0, (distance.toString().length / 3).toInt())} km",
+                                text: distance,
                               ),
                             ],
                           ),
@@ -197,7 +232,7 @@ await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.park
                             height: 50.h,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: listOfPrice.length,
+                                itemCount: listOfPrice!.length,
                                 itemBuilder: (context, index) {
                                   bool isSelected = index ==
                                       currentIndex; // Change to your desired color
@@ -205,9 +240,9 @@ await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.park
                                   return InkWell(
                                     child: PlansWidget(
                                       price: splitStringFromColon(
-                                          listOfPrice[index], 1),
+                                          listOfPrice![index], 1),
                                       time: splitStringFromColon(
-                                          listOfPrice[index], 0),
+                                          listOfPrice![index], 0),
                                       color: isSelected
                                           ? Styling.primaryColor
                                           : Colors.grey,
@@ -256,24 +291,26 @@ await FirebaseUserRepository.updateSlots(widget.parking.documentId!, widget.park
                                     ),
                                   ),
                                   child: InkWell(
-                                    child: Text.rich(TextSpan(
-                                        text: "Reserve for  ",
-                                        style: CustomTextStyle.font_14,
-                                        children: <InlineSpan>[
-                                          TextSpan(
-                                            text:
-                                                "${(int.parse(getNumericValue(splitStringFromColon(listOfPrice[currentIndex], 1))) * selectedValue)} PKR",
+                                    child: Center(
+                                      child: Text.rich(TextSpan(
+                                          text: " Reserve for  ",
+                                          style: CustomTextStyle.font_14,
+                                          children: <InlineSpan>[
+                                            TextSpan(
+                                              text:
+                                                  "${(int.parse(getNumericValue(splitStringFromColon(listOfPrice![currentIndex], 1))) * selectedValue)} PKR",
 
-                                            // text:
-                                            //     "${int.parse(getNumericValue(splitStringFromColon(listOfPrice[currentIndex], 1) * selectedValue))}",
-                                            style: CustomTextStyle.font_18,
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "\n                       ${splitStringFromColon(listOfPrice[currentIndex], 0)}",
-                                            style: CustomTextStyle.font_14,
-                                          )
-                                        ])),
+                                              // text:
+                                              //     "${int.parse(getNumericValue(splitStringFromColon(listOfPrice[currentIndex], 1) * selectedValue))}",
+                                              style: CustomTextStyle.font_18,
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  "\n                       ${splitStringFromColon(listOfPrice![currentIndex], 0)}",
+                                              style: CustomTextStyle.font_14,
+                                            )
+                                          ])),
+                                    ),
                                     onTap: () async {
                                       await _bookParking();
                                     },
@@ -350,12 +387,12 @@ class PlansWidget extends StatelessWidget {
       ),
       child: Center(
         child: Text.rich(TextSpan(
-            text: time,
+            text: "${time} ",
             style: CustomTextStyle.font_12_grey,
             children: <InlineSpan>[
               TextSpan(
                 text: price,
-                style: CustomTextStyle.font_18_grey,
+                style: CustomTextStyle.font_16_grey,
               )
             ])),
       ),

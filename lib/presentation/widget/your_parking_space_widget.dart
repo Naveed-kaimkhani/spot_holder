@@ -61,34 +61,50 @@ class YourParkingSpaceWidget extends StatelessWidget {
               slots: parking.bookedSlots!,
             ),
             SizedBox(
-              height: 23.h,
+              height: 14.h,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 230.w),
-              child: Column(
-                children: [
-                  Text(
-                    "  ${parking.price} pkr",
-                    style: CustomTextStyle.font_18_primary,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0, top: 4),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.hourglass_bottom,
-                          color: Styling.primaryColor,
-                        ),
-                        Text(
-                          "1 hr",
-                          style: CustomTextStyle.font_12_grey,
-                        )
-                        // Image.asset(Images.)
-                      ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      parking.sentTime.toString(),
+                      style: CustomTextStyle.font_12_grey,
                     ),
-                  )
-                ],
-              ),
+                    Text(
+                      parking.sentDate.toString(),
+                      style: CustomTextStyle.font_12_grey,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "  ${parking.price} pkr",
+                      style: CustomTextStyle.font_18_primary,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, top: 4),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.hourglass_bottom,
+                            color: Styling.primaryColor,
+                          ),
+                          Text(
+                            "",
+                            style: CustomTextStyle.font_12_grey,
+                          )
+                          // Image.asset(Images.)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
             )
           ],
         ),

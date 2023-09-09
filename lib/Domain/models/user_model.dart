@@ -5,6 +5,7 @@ class UserModel {
   String? name;
   double? lat;
   double? long;
+  int? balance;
   String? address;
   String? phone;
   String? email;
@@ -19,6 +20,7 @@ class UserModel {
       required this.address,
       this.lat,
       this.long,
+      this.balance,
       required this.email,
       required this.deviceToken,
       
@@ -33,6 +35,7 @@ class UserModel {
     data['long'] = user.long;
     data['address'] = user.address;
     data['phone'] = user.phone;
+    data['balance'] = user.balance;
     data['email'] = user.email;
     data['deviceToken'] = user.deviceToken;
     return data;
@@ -46,6 +49,7 @@ class UserModel {
     long = mapData['long'];
     address = mapData['address'];
     phone = mapData['phone'];
+    balance = mapData['balance'];    
     email = mapData['email'];
     deviceToken = mapData['deviceToken'];
   }

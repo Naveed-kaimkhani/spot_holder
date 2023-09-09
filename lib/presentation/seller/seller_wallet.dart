@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:spot_holder/presentation/widget/custom_divider.dart';
 import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
+import 'package:provider/provider.dart';
+import '../../Domain/models/user_model.dart';
 
-class Wallet extends StatelessWidget {
-  const Wallet({super.key});
+class SellerWallet extends StatelessWidget {
+  const SellerWallet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserModel? seller =
+        Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -17,7 +22,7 @@ class Wallet extends StatelessWidget {
           children: [
             HomeHeader(
               height: 94.h,
-              barTitle: "Wallet",
+              barTitle: "SellerWallet",
             ),
             SizedBox(
               height: 12.h,
@@ -35,7 +40,7 @@ class Wallet extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 130.w),
               child: Text(
-                "260.00 PKR",
+                "   ${seller!.balance} PKR",
                 style: CustomTextStyle.font_20,
               ),
             ),
@@ -52,7 +57,7 @@ class Wallet extends StatelessWidget {
             SizedBox(
               height: 11.h,
             ),
-            CustomDivider(),
+            const CustomDivider(),
           ],
         ),
       ),

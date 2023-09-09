@@ -17,6 +17,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:spot_holder/provider/parking_list_provider.dart';
 import 'package:spot_holder/utils/custom_loader.dart';
 import 'package:spot_holder/utils/utils.dart';
+import '../../Domain/transaction.dart';
 
 import '../Domain/models/parking_model.dart';
 import '../Domain/models/reserved_parking_model.dart';
@@ -30,12 +31,16 @@ class FirebaseUserRepository {
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final CollectionReference _userCollection =
       firestore.collection('users');
+
+  static final CollectionReference _transactionCollection =
+      firestore.collection('transactions');
+
   static final CollectionReference _sellerCollection =
       firestore.collection('sellers');
 
   static final CollectionReference _parkingCollection =
       firestore.collection('parkings');
-      
+
   static final CollectionReference _reservedParkingCollection =
       firestore.collection('reserved_parkings');
   static final Reference _storageReference = FirebaseStorage.instance.ref();
@@ -51,24 +56,26 @@ class FirebaseUserRepository {
       utils.flushBarErrorMessage("Invalid email or password", context);
     }
   }
-static Future<List<ParkingModel>> getParkingSpots(context,) async {
-  List<ParkingModel> parkingList = [];
+
+  static Future<List<ParkingModel>> getParkingSpots(
+    context,
+  ) async {
+    List<ParkingModel> parkingList = [];
 
     print("in getParking");
-  try {
-    print("in try");
+    try {
+      print("in try");
       QuerySnapshot querySnapshot = await _parkingCollection.get();
       print(querySnapshot.docs[0]);
       parkingList = querySnapshot.docs.map((doc) {
         print(doc);
         return ParkingModel.fromMap(doc.data() as dynamic);
       }).toList();
-    
-  } catch (e) {
-    utils.flushBarErrorMessage('Error fetching donations: $e', context);
+    } catch (e) {
+      utils.flushBarErrorMessage('Error fetching donations: $e', context);
+    }
+    return parkingList;
   }
-  return parkingList;
-}
 
   static Stream<List<ParkingModel>> getParkingList(context, bool all) async* {
     List<ParkingModel> parkingList = [];
@@ -93,20 +100,37 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
     yield parkingList;
   }
 
-  static Stream<List<ReservedParkingModel>> getReservedParkings(context) async* {
+  static Stream<List<ReservedParkingModel>> getReservedParkings(
+      context) async* {
     List<ReservedParkingModel> parkingList = [];
 
     try {
-     
-        QuerySnapshot querySnapshot = await _reservedParkingCollection.where('userUid',isEqualTo: utils.currentUserUid).get();
-        parkingList = querySnapshot.docs.map((doc) {
-          return ReservedParkingModel.fromMap(doc.data() as dynamic);
-        }).toList();
-     
+      QuerySnapshot querySnapshot = await _reservedParkingCollection
+          .where('userUid', isEqualTo: utils.currentUserUid)
+          .get();
+      parkingList = querySnapshot.docs.map((doc) {
+        return ReservedParkingModel.fromMap(doc.data() as dynamic);
+      }).toList();
     } catch (e) {
       utils.flushBarErrorMessage('Error fetching parkings: $e', context);
     }
     yield parkingList;
+  }
+
+  static Stream<List<TransactionModel>> getTransactionHistory(context) async* {
+    List<TransactionModel> historyList = [];
+
+    try {
+      QuerySnapshot querySnapshot = await _transactionCollection
+          .where('senderUid', isEqualTo: utils.currentUserUid)
+          .get();
+      historyList = querySnapshot.docs.map((doc) {
+        return TransactionModel.fromMap(doc.data() as dynamic);
+      }).toList();
+    } catch (e) {
+      utils.flushBarErrorMessage('Error fetching history: $e', context);
+    }
+    yield historyList;
   }
 
   Future<String> uploadProfileImage(
@@ -130,6 +154,7 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
 
   Future<Position?> getUserCurrentLocation(context) async {
     try {
+      print("getUserCurrentLocation");
       await Geolocator.requestPermission();
       var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
@@ -176,9 +201,13 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
 
   loadUserDataOnAppInit(context) async {
     try {
+      final value = await getUserCurrentLocation(context);
+      String address =
+          await utils.getAddressFromLatLng(value!.latitude, value.longitude);
+      await updateUserLocation(value.latitude, value.longitude, address);
       await Provider.of<UserProvider>(context, listen: false)
           .getUserFromServer(context);
-    await Provider.of<ParkingListProvider>(context, listen: false)
+      await Provider.of<ParkingListProvider>(context, listen: false)
           .getParkingList(context);
 
       // Navigate to the home screen after loading the data
@@ -269,7 +298,7 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
       // Update the document with the added document ID
       await parkingRef.update({'documentId': documentId});
       // utils.toastMessage('Donation stored successfully!');
-      parkingDonePopup(context,'Parking added Successfully');
+      parkingDonePopup(context, 'Parking added Successfully');
       // print('Donation stored successfully!');
     } catch (e) {
       LoaderOverlay.hide();
@@ -277,7 +306,7 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
       // print('Error storing donation: $e');
     }
   }
-  
+
   static Future<void> bookParkingModelToFirestore(
       ReservedParkingModel parking, context) async {
     try {
@@ -289,7 +318,8 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
       Map<String, dynamic> parkingData = parking.toMap(parking);
 
       // Add the donation data as a new document in the "donations" collection
-      DocumentReference parkingRef = await _reservedParkingCollection.add(parkingData);
+      DocumentReference parkingRef =
+          await _reservedParkingCollection.add(parkingData);
 
       // Get the ID of the newly added document and store it in the donationData map
       String documentId = parkingRef.id;
@@ -298,7 +328,6 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
       // Update the document with the added document ID
       await parkingRef.update({'documentId': documentId});
       // utils.toastMessage('Donation stored successfully!');
-      parkingDonePopup(context,'Parking book Successfully');
       // print('Donation stored successfully!');
     } catch (e) {
       LoaderOverlay.hide();
@@ -306,21 +335,94 @@ static Future<List<ParkingModel>> getParkingSpots(context,) async {
       // print('Error storing donation: $e');
     }
   }
-  static Future<void> updateSlots(
-      String parkingDocumentId,int availableSlots,int slotsBooked, context) async {
+
+  static Future<void> updateSlots(String parkingDocumentId, int availableSlots,
+      int slotsBooked, context) async {
     try {
       // Reference to the parking document in Firestore
-      DocumentReference parkingRef =
-          _parkingCollection.doc(parkingDocumentId);
-        int left=availableSlots-slotsBooked;
+      DocumentReference parkingRef = _parkingCollection.doc(parkingDocumentId);
+      int left = availableSlots - slotsBooked;
       // Update the bookedSlots field
-      await parkingRef.update({'bookedSlots': slotsBooked,'availableSlots': left});
+      await parkingRef
+          .update({'bookedSlots': slotsBooked, 'availableSlots': left});
 
       // Success message or further actions
       utils.toastMessage('Slots updated successfully!');
     } catch (e) {
       LoaderOverlay.hide();
       utils.toastMessage('Error updating Slots: $e');
+    }
+  }
+
+  static Future<void> updateBalance(String userId, int userUpdatedBalance,
+      int paymentTobeAdd, String sellerId, context) async {
+    try {
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('sellers') // Replace with your collection name
+          .doc(sellerId) // Provide the user's document ID or path
+          .get();
+      final userData = userDoc.data() as Map<String, dynamic>;
+      final balance = userData['balance'];
+      final totalBalance = balance + paymentTobeAdd;
+
+      DocumentReference sellerRef = _sellerCollection.doc(sellerId);
+      // Update the balance field
+      await sellerRef.update({'balance': totalBalance});
+
+      // Reference to the user document in Firestore
+      DocumentReference userRef = _userCollection.doc(userId);
+      // Update the balance field
+      await userRef.update({'balance': userUpdatedBalance});
+    } catch (e) {
+      print("error in updateBalance");
+      print(e);
+      LoaderOverlay.hide();
+      // utils.toastMessage('Error during Transaction: $e');
+    }
+  }
+
+  static Future<void> saveTransaction(TransactionModel model, context) async {
+    try {
+      //save transaction to firestore
+      Map<String, dynamic> transactionData = model.toMap(model);
+
+      DocumentReference transactionRef =
+          await _transactionCollection.add(transactionData);
+      // Get the ID of the newly added document and store it in the donationData map
+      String documentId = transactionRef.id;
+      // parkingData['documentId'] = documentId;
+
+      // Update the document with the added document ID
+      await transactionRef.update({'documentId': documentId});
+      // Success message or further actions
+      // utils.toastMessage(' Transaction successfull!');
+
+      parkingDonePopup(context, 'Parking book Successfully');
+      // print('Donation stored successfully!');
+    } catch (e) {
+      print("error in transaction");
+      print(e);
+      LoaderOverlay.hide();
+      // utils.toastMessage('Error storing donation: $e');
+      // print('Error storing donation: $e');
+    }
+  }
+
+  Future<void> updateUserLocation(
+    double lat,
+    double long,
+    String address,
+  ) async {
+    try {
+      final userRef = _userCollection.doc(utils.currentUserUid);
+
+      await userRef.update({
+        'lat': lat,
+        'long': long,
+        'address': address,
+      });
+    } catch (e) {
+      utils.toastMessage(e.toString());
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:spot_holder/Domain/models/parking_model.dart';
 import 'package:spot_holder/presentation/widget/circle_progress.dart';
@@ -13,11 +13,11 @@ import 'package:spot_holder/utils/routes/routes.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
 
 import '../../Data/FirebaseUserRepository.dart';
+import '../../Domain/models/user_model.dart';
 import '../../main.dart';
+import '../../provider/user_provider.dart';
 import '../../style/images.dart';
 import '../no_data_found.dart';
-import '../widget/home_headers_decoration.dart';
-import '../widget/reserved_parking_header.dart';
 import '../widget/your_parking_space_widget.dart';
 
 class SellerHomepage extends StatelessWidget {
@@ -25,6 +25,8 @@ class SellerHomepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? seller =
+        Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
         child: Scaffold(
       backgroundColor: Styling.backgroundColor,
@@ -56,55 +58,63 @@ class SellerHomepage extends StatelessWidget {
           Navigator.pushNamed(context, RoutesName.addNewParking);
         },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HomeHeader(
-              height: 180.h,
-              text: "Hi Qamar",
-              barTitle: "Home",
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w),
-              child: Text(
-                "Your parking space",
-                style: CustomTextStyle.font_18_primary,
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            
-            StreamBuilder<List<ParkingModel>>(
-              stream: FirebaseUserRepository.getParkingList(context,false),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircleProgress();
-                  // return SizedBox();
-                } else if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const NoDataFoundScreen(
-                    text: "No Donation",
-                  );
-                } else {
-                  return ListView.builder(
+      body: StreamBuilder<List<ParkingModel>>(
+        stream: FirebaseUserRepository.getParkingList(context, false),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircleProgress();
+            // return SizedBox();
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Column(
+              children: [
+                HomeHeader(
+                  height: 180.h,
+                  text: "Hi ${seller!.name}",
+                  barTitle: "Home",
+                ),
+                const NoDataFoundScreen(
+                  text: "No Bookings",
+                ),
+              ],
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  HomeHeader(
+                    height: 180.h,
+                    text: "Hi Qamar",
+                    barTitle: "Home",
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.w),
+                    child: Text(
+                      "Your parking space",
+                      style: CustomTextStyle.font_18_primary,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         return YourParkingSpaceWidget(
                             parking: snapshot.data![index]);
-                      });
-                }
-              },
-            ),
-          ],
-        ),
+                      }),
+                ],
+              ),
+            );
+          }
+        },
       ),
     ));
   }

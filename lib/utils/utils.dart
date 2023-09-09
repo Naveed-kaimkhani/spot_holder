@@ -353,15 +353,18 @@ static String get currentUserUid => FirebaseAuth.instance.currentUser!.uid;
     int halfLength = (address.length / 3).floor();
     return address.substring(0, halfLength);
   }
- static double getDistancebtwSourceNDestination(
+ static String getDistancebtwSourceNDestination(
     double sourceLat,
     double sourceLong,
     double destinationLat,
-    double destinationLong,
+    double destinationLong ,
   
   ) {
-    return Geolocator.distanceBetween(sourceLat, sourceLong,
+   double distance =Geolocator.distanceBetween(sourceLat, sourceLong,
         destinationLat, destinationLong);
+    return "${(distance / 1000).toString().substring(0, (distance.toString().length / 3).toInt())} km";
+
+    // return distance;
   }
 
 }

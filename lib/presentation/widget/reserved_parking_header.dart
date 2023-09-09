@@ -23,8 +23,10 @@ class ReservedParkingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
+
    UserModel?   user = Provider.of<UserProvider>(context, listen: false).user;
+   String distance=  utils.getDistancebtwSourceNDestination(user!.lat!, user.long!, parking.locationLat!,parking.locationLong!).toString();
+
     return Container(
       height: 180.h,
       width: mq.width,
@@ -68,7 +70,7 @@ class ReservedParkingHeader extends StatelessWidget {
                   width: 4.w,
                 ),
                 Text(
-                 utils.getDistancebtwSourceNDestination(user!.lat!, user.long!, parking.locationLat!,parking.locationLong!).toString(),
+                  distance,
                   style: CustomTextStyle.font_12_grey,
                 ),
               ],

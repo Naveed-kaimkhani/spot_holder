@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/seller/seller_homepage.dart';
+import 'package:spot_holder/presentation/seller/seller_wallet.dart';
 import 'package:spot_holder/presentation/user/booking.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
-import 'package:spot_holder/presentation/user/wallet.dart';
+import 'package:spot_holder/presentation/user/user_wallet.dart';
 import '../../style/images.dart';
 import '../../style/styling.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,9 +17,9 @@ class SellerNavigation extends StatefulWidget {
 
 class _SellerNavigationState extends State<SellerNavigation> {
   List pages = [
-    SellerHomepage(),
-    Wallet(),
-    Wallet()
+    const SellerHomepage(),
+    const SellerWallet(),
+    const SellerWallet()
     // const DonarDonationsScreen(),
     // const DonarSetting(),
   ];
@@ -30,7 +31,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
   }
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = SellerHomepage();
+  Widget currentScreen = const SellerHomepage();
   @override
   Widget build(BuildContext context) {
     SizedBox k = SizedBox(
@@ -55,7 +56,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = SellerHomepage();
+                              currentScreen = const SellerHomepage();
                               currentindex = 0;
                             });
                           },
@@ -73,7 +74,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = Wallet();
+                              currentScreen = SellerWallet();
                               currentindex = 1;
                             });
                           },
@@ -91,7 +92,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = Wallet();
+                              currentScreen = SellerWallet();
                               currentindex = 2;
                             });
                           },
@@ -109,7 +110,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = SellerHomepage();
+                              currentScreen = const SellerHomepage();
                               currentindex = 3;
                             });
                           },

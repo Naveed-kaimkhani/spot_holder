@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/user/booking.dart';
 import 'package:spot_holder/presentation/user/parking_spots_onMap.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
-import 'package:spot_holder/presentation/user/wallet.dart';
+import 'package:spot_holder/presentation/user/user_setting.dart';
+import 'package:spot_holder/presentation/user/user_wallet.dart';
 import '../../style/images.dart';
 import '../../style/styling.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,9 +17,10 @@ class UserNavigation extends StatefulWidget {
 
 class _UserNavigationState extends State<UserNavigation> {
   List pages = [
-    UserHomepage(),
-    ParkingSpotsOnMap(),
-    Wallet()
+    const UserHomepage(),
+    const ParkingSpotsOnMap(),
+    const UserWallet(),
+    const UserSetting()
     // const DonarDonationsScreen(),
     // const DonarSetting(),
   ];
@@ -30,7 +32,7 @@ class _UserNavigationState extends State<UserNavigation> {
   }
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = UserHomepage();
+  Widget currentScreen = const UserHomepage();
   @override
   Widget build(BuildContext context) {
     SizedBox k = SizedBox(
@@ -55,7 +57,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = const UserHomepage();
                               currentindex = 0;
                             });
                           },
@@ -73,7 +75,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = ParkingSpotsOnMap();
+                              currentScreen = const ParkingSpotsOnMap();
                               currentindex = 1;
                             });
                           },
@@ -91,7 +93,7 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = Wallet();
+                              currentScreen = const UserWallet();
                               currentindex = 2;
                             });
                           },
@@ -109,13 +111,13 @@ class _UserNavigationState extends State<UserNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = UserHomepage();
+                              currentScreen = const UserSetting();
                               currentindex = 3;
                             });
                           },
                           child: Icon(
                             size: 38.w,
-                            Icons.notifications_none_rounded,
+                            Icons.settings,
                             color:
                                 currentindex == 3 ? Colors.white : Colors.grey,
                           ),
