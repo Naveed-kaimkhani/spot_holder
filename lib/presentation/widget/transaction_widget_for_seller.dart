@@ -6,9 +6,9 @@ import 'package:spot_holder/style/custom_text_style.dart';
 import '../../Domain/transaction.dart';
 import '../../main.dart';
 
-class TransactionHistoryWidget extends StatelessWidget {
+class TransactionHistoryWidgetForSeller extends StatelessWidget {
   final TransactionModel model;
-  const TransactionHistoryWidget({
+  const TransactionHistoryWidgetForSeller({
     super.key,
     required this.model,
   });
@@ -41,14 +41,14 @@ class TransactionHistoryWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Money Transfer",
+                  "Money Received",
                   style: CustomTextStyle.font_12_grey,
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 Text(
-                  "receiver: ${model.receiverName}",
+                  "sender: ${model.senderName}",
                   style: CustomTextStyle.font_14_black,
                 ),
               ],
@@ -69,7 +69,7 @@ class TransactionHistoryWidget extends StatelessWidget {
                 ),
                 Text(
                   "${model.payment} Pkr",
-                  style: TextStyle(fontSize: 18.sp, color: Colors.red),
+                  style: TextStyle(fontSize: 18.sp, color: Colors.green),
                 ),
               ],
             ),

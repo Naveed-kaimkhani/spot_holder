@@ -100,13 +100,13 @@ class FirebaseUserRepository {
     yield parkingList;
   }
 
-  static Stream<List<ReservedParkingModel>> getReservedParkings(
+  static Stream<List<ReservedParkingModel>> getReservedParkings( String query,
       context) async* {
     List<ReservedParkingModel> parkingList = [];
 
     try {
       QuerySnapshot querySnapshot = await _reservedParkingCollection
-          .where('userUid', isEqualTo: utils.currentUserUid)
+          .where(query, isEqualTo: utils.currentUserUid)
           .get();
       parkingList = querySnapshot.docs.map((doc) {
         return ReservedParkingModel.fromMap(doc.data() as dynamic);
@@ -116,6 +116,23 @@ class FirebaseUserRepository {
     }
     yield parkingList;
   }
+  
+  // static Stream<List<ReservedParkingModel>> getReservedParkingsStatus(
+  //     context) async* {
+  //   List<ReservedParkingModel> parkingList = [];
+
+  //   try {
+  //     QuerySnapshot querySnapshot = await _reservedParkingCollection
+  //         .where('ownerUid', isEqualTo: utils.currentUserUid)
+  //         .get();
+  //     parkingList = querySnapshot.docs.map((doc) {
+  //       return ReservedParkingModel.fromMap(doc.data() as dynamic);
+  //     }).toList();
+  //   } catch (e) {
+  //     utils.flushBarErrorMessage('Error fetching parkings: $e', context);
+  //   }
+  //   yield parkingList;
+  // }
 
   static Stream<List<TransactionModel>> getTransactionHistory(context) async* {
     List<TransactionModel> historyList = [];
@@ -123,6 +140,22 @@ class FirebaseUserRepository {
     try {
       QuerySnapshot querySnapshot = await _transactionCollection
           .where('senderUid', isEqualTo: utils.currentUserUid)
+          .get();
+      historyList = querySnapshot.docs.map((doc) {
+        return TransactionModel.fromMap(doc.data() as dynamic);
+      }).toList();
+    } catch (e) {
+      utils.flushBarErrorMessage('Error fetching history: $e', context);
+    }
+    yield historyList;
+  }
+  
+  static Stream<List<TransactionModel>> getTransactionHistoryForSeller(context) async* {
+    List<TransactionModel> historyList = [];
+
+    try {
+      QuerySnapshot querySnapshot = await _transactionCollection
+          .where('receiverUid', isEqualTo: utils.currentUserUid)
           .get();
       historyList = querySnapshot.docs.map((doc) {
         return TransactionModel.fromMap(doc.data() as dynamic);

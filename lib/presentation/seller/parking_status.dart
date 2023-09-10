@@ -6,6 +6,7 @@ import 'package:spot_holder/Domain/models/user_model.dart';
 import 'package:spot_holder/presentation/user/user_parking_direction.dart';
 import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/widget/parking_status_widget.dart';
 import 'package:spot_holder/presentation/widget/previous_parking_widget.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
@@ -17,12 +18,12 @@ import '../no_data_found.dart';
 import '../widget/circle_progress.dart';
 import '../widget/reserved_parking_header.dart';
 
-class UserHomepage extends StatelessWidget {
-  const UserHomepage({super.key});
+class ParkingStatus extends StatelessWidget {
+  const ParkingStatus({super.key});
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
         child: Scaffold(
       backgroundColor: Styling.backgroundColor,
@@ -32,26 +33,27 @@ class UserHomepage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeHeader(
-              height: 180.h,
-              text: "Hi ${user!.name}",
-              barTitle: "Home",
+              height: 84.h,
+              // text: "Hi ${user!.name}",
+              barTitle: "Parking Status",
             ),
             SizedBox(
-              height: 20.h,
+              height: 40.h,
             ),
             Padding(
               padding: EdgeInsets.only(left: 16.w),
               child: Text(
-                "Reserved parking spaces",
+                "Current Reserved",
                 style: CustomTextStyle.font_18_primary,
               ),
             ),
             SizedBox(
               height: 2.h,
             ),
-
+            // ParkingStatusWidget(),
             StreamBuilder<List<ReservedParkingModel>>(
-              stream: FirebaseUserRepository.getReservedParkings("userUid",context),
+              stream: FirebaseUserRepository.getReservedParkings(
+                  "ownerUid", context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircleProgress();
@@ -68,44 +70,13 @@ class UserHomepage extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          child: ReservedParkingHeader(
-                              parking: snapshot.data![index]),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserParkingTraking(
-                                        parkingModel: snapshot.data![index])));
-                          },
-                        );
+                        return ParkingStatusWidget(
+                            parking: snapshot.data![index]);
                       });
                 }
               },
             ),
 
-            SizedBox(
-              height: 22.h,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Previous parking",
-                    style: CustomTextStyle.font_18_primary,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      "view all",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             // PreviousParkingWidget(),
           ],
         ),

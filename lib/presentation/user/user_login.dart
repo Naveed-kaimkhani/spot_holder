@@ -6,6 +6,7 @@ import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/presentation/widget/auth_button.dart';
 import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:spot_holder/style/images.dart';
+import 'package:spot_holder/utils/routes/routes_name.dart';
 import 'package:spot_holder/utils/utils.dart';
 
 import 'package:spot_holder/Domain/models/user_model.dart';
@@ -216,7 +217,9 @@ class _UserLoginState extends State<UserLogin> {
                     height: 56.h,
                     widht: 300.w,
                     text: "SignUp",
-                    func: () {},
+                    func: () {
+                      Navigator.pushNamed(context,RoutesName.userSignup);
+                    },
                     color: Styling.primaryColor,
                   ),
                   Padding(

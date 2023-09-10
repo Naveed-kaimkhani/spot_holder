@@ -3,6 +3,7 @@ import 'package:spot_holder/presentation/seller/add_new_parking.dart';
 import 'package:spot_holder/presentation/seller/seller_sign.dart';
 import 'package:spot_holder/presentation/user/change_password.dart';
 import 'package:spot_holder/presentation/user/user_navigation.dart';
+import 'package:spot_holder/presentation/user/user_signup.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
 
 import '../../presentation/user/user_login.dart';
@@ -22,6 +23,9 @@ class Routes {
 
       case RoutesName.passwordOption:
         return _buildRoute(const PasswordOption(), settings);
+
+      case RoutesName.userSignup:
+        return _buildRoute(const UserSignUp(), settings);
 
       // case RoutesName.trackDonation:
       //   return _buildRoute( TrackDonation(), settings);

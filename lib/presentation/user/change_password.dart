@@ -64,7 +64,7 @@ class _PasswordOptionState extends State<PasswordOption> {
           utils.toastMessage("Password updated Successfully");
 
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => UserNavigation()));
+              MaterialPageRoute(builder: (context) => const UserNavigation()));
         }).onError((error, stackTrace) {
           isLoadingg(false);
           String errorMessage = utils.getFriendlyErrorMessage(
@@ -95,7 +95,7 @@ class _PasswordOptionState extends State<PasswordOption> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -115,7 +115,7 @@ class _PasswordOptionState extends State<PasswordOption> {
                         width: 60.w,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Column(
@@ -133,7 +133,7 @@ class _PasswordOptionState extends State<PasswordOption> {
                 // SizedBox(
                 //   height: 14.h,
                 // ),
-                Divider(
+                const Divider(
                   thickness: 2.0,
                 ),
                 SizedBox(
@@ -204,7 +204,7 @@ class _PasswordOptionState extends State<PasswordOption> {
                 Align(
                   alignment: Alignment.center,
                   child: isLoading
-                      ? CircleProgress()
+                      ? const CircleProgress()
                       : AuthButton(
                           height: 46.h,
                           widht: 250.w,

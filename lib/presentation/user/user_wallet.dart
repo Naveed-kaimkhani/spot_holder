@@ -63,6 +63,7 @@ class UserWallet extends StatelessWidget {
               height: 11.h,
             ),
             const CustomDivider(),
+            
             StreamBuilder<List<TransactionModel>>(
               stream: FirebaseUserRepository.getTransactionHistory(context),
               builder: (context, snapshot) {

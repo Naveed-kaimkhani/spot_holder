@@ -13,25 +13,23 @@ import '../../main.dart';
 import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/images.dart';
+import '../../style/styling.dart';
 
-class ReservedParkingHeader extends StatelessWidget {
+class ParkingStatusWidget extends StatelessWidget {
   final ReservedParkingModel parking;
-  const ReservedParkingHeader({
+  const ParkingStatusWidget({
     required this.parking,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
-    String distance = utils
-        .getDistancebtwSourceNDestination(
-            user!.lat!, user.long!, parking.locationLat!, parking.locationLong!)
-        .toString();
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).seller;
+    //  String distance=  utils.getDistancebtwSourceNDestination(user!.lat!, user.long!, parking.locationLat!,parking.locationLong!).toString();
 
     return Container(
-      height: 180.h,
-      width: mq.width,
+      height: 102.h,
+      width: 343.w,
       // padding: EdgeInsets.all(32.w),
       margin: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
@@ -47,53 +45,56 @@ class ReservedParkingHeader extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(15.w),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              parking.parkingAddress!,
-              style: CustomTextStyle.font_14_black,
-            ),
-            SizedBox(
-              height: 4.h,
-            ),
-            Row(
-              children: [
-                Text(
-                  "On Spot Parking",
-                  style: CustomTextStyle.font_12_grey,
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                SvgPicture.asset(Images.pointer),
-                SizedBox(
-                  width: 4.w,
-                ),
-                Text(
-                  distance,
-                  style: CustomTextStyle.font_12_grey,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 23.h,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TimeWidget(
-                  time: parking.reservedTime!,
-                  date: parking.reservedDate!,
+                Text(
+                  parking.userContact!,
+                  style: CustomTextStyle.font_12_grey,
                 ),
-                // TimeWidget(
-                //   time: parking.durationTime!,
-                //   date: "6 Feb, 2023",
-                //   charges: 60,
-                // ),
+                Text(
+                  " ${parking.price.toString()} Pkr",
+                  style: CustomTextStyle.font_18_primary,
+                ),
               ],
-            )
+            ),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(
+              parking.userName!,
+              style: CustomTextStyle.font_18_black,
+            ),
+            SizedBox(
+              height: 12.h,
+            ),
+            Row(
+              children: [
+                SvgPicture.asset(Images.spot),
+                SizedBox(
+                  width: 5.w,
+                ),
+                Text(
+                  "Spot no: ${parking.bookedSlots}",
+                  style: CustomTextStyle.font_12_grey,
+                ),
+                SizedBox(
+                  width: 154.w,
+                ),
+                const Icon(
+                  Icons.hourglass_bottom,
+                  color: Styling.primaryColor,
+                ),
+                Text(
+                  "${parking.durationTime!} hr",
+                  style: CustomTextStyle.font_12_grey,
+                ),
+              ],
+            ),
           ],
         ),
       ),

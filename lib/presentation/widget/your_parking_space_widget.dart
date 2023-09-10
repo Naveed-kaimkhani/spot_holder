@@ -86,22 +86,22 @@ class YourParkingSpaceWidget extends StatelessWidget {
                       "  ${parking.price} pkr",
                       style: CustomTextStyle.font_18_primary,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0, top: 4),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.hourglass_bottom,
-                            color: Styling.primaryColor,
-                          ),
-                          Text(
-                            "",
-                            style: CustomTextStyle.font_12_grey,
-                          )
-                          // Image.asset(Images.)
-                        ],
-                      ),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 12.0, top: 4),
+                    //   child: Row(
+                    //     children: [
+                    //       const Icon(
+                    //         Icons.hourglass_bottom,
+                    //         color: Styling.primaryColor,
+                    //       ),
+                    //       Text(
+                    //         "",
+                    //         style: CustomTextStyle.font_12_grey,
+                    //       )
+                    //       // Image.asset(Images.)
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ],

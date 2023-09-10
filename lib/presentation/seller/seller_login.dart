@@ -76,24 +76,27 @@ class _SellerLoginState extends State<SellerLogin> {
   }
 
   void _getUserDetails() async {
-    _firebaseRepository.getSeller().then((UserModel? userModel) async {
-      if (userModel != null) {
-        // await _firebaseRepository.loadUserDataOnAppInit(context);
         await Provider.of<UserProvider>(context, listen: false)
             .getSellerFromServer(context);
 
-        // await StorageService.initUser();
-        isLoading(false);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => SellerNavigation()));
-      } else {
-        isLoading(false);
-        utils.flushBarErrorMessage("User is null", context);
-      }
-    }).catchError((error) {
-      isLoading(false);
-      utils.flushBarErrorMessage(error.message.toString(), context);
-    });
+    // _firebaseRepository.getSeller().then((UserModel? userModel) async {
+    //   if (userModel != null) {
+    //     // await _firebaseRepository.loadUserDataOnAppInit(context);
+    //     // await Provider.of<UserProvider>(context, listen: false)
+    //     //     .getSellerFromServer(context);
+
+    //     // await StorageService.initUser();
+    //     isLoading(false);
+    //     Navigator.pushReplacement(context,
+    //         MaterialPageRoute(builder: (context) => SellerNavigation()));
+    //   } else {
+    //     isLoading(false);
+    //     utils.flushBarErrorMessage("User is null", context);
+    //   }
+    // }).catchError((error) {
+    //   isLoading(false);
+    //   utils.flushBarErrorMessage(error.message.toString(), context);
+    // });
   }
 
   @override

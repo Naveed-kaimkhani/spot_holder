@@ -12,13 +12,13 @@ import 'custom_app_bar.dart';
 class HomeHeader extends StatelessWidget {
   final String? text;
   final String barTitle;
-  // final int balance;
+  // int? balance;
   final double height;
   // final TextStyle style;
   HomeHeader({
     Key? key,
     this.text,
-    // required this.balance,
+    // this.balance,
     required this.barTitle,
     // required this.style,
     required this.height,

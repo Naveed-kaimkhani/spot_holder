@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
             ),
             // home:utils.currentUserUid==null?SellerLogin():SellerNavigation(),
             // home:utils.currentUserUid==null?UserLogin():UserNavigation(),
-            home: UserLogin(),
+            home: SellerLogin(),
             onGenerateRoute: Routes.onGenerateRoute,
           ),
         );

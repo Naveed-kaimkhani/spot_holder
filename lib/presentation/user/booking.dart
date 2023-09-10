@@ -52,9 +52,12 @@ class _BookingState extends State<Booking> {
     ReservedParkingModel parkingModel = ReservedParkingModel(
       userUid: utils.currentUserUid,
       parkingDocumentId: widget.parking.documentId,
+      userName: user!.name,
       locationLat: widget.parking.locationLat,
       locationLong: widget.parking.locationLong,
       parkingId: widget.parking.parkingId,
+      owneruid: widget.parking.ownerUid,
+      userContact: widget.parking.ownerPhone,
       price: (int.parse(getNumericValue(
               splitStringFromColon(listOfPrice![currentIndex], 1))) *
           selectedValue),

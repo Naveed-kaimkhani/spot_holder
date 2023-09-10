@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/seller/parking_status.dart';
 import 'package:spot_holder/presentation/seller/seller_homepage.dart';
+import 'package:spot_holder/presentation/seller/seller_setting.dart';
 import 'package:spot_holder/presentation/seller/seller_wallet.dart';
 import 'package:spot_holder/presentation/user/booking.dart';
 import 'package:spot_holder/presentation/user/user_homepage.dart';
@@ -18,8 +20,9 @@ class SellerNavigation extends StatefulWidget {
 class _SellerNavigationState extends State<SellerNavigation> {
   List pages = [
     const SellerHomepage(),
+    const ParkingStatus(),
     const SellerWallet(),
-    const SellerWallet()
+    const SellerSetting()
     // const DonarDonationsScreen(),
     // const DonarSetting(),
   ];
@@ -71,10 +74,10 @@ class _SellerNavigationState extends State<SellerNavigation> {
                         ),
                         k,
                         MaterialButton(
-                          minWidth: 40,
+                          minWidth: 44,
                           onPressed: () {
                             setState(() {
-                              currentScreen = SellerWallet();
+                              currentScreen = const ParkingStatus();
                               currentindex = 1;
                             });
                           },
@@ -92,7 +95,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = SellerWallet();
+                              currentScreen = const SellerWallet();
                               currentindex = 2;
                             });
                           },
@@ -110,13 +113,13 @@ class _SellerNavigationState extends State<SellerNavigation> {
                           minWidth: 40,
                           onPressed: () {
                             setState(() {
-                              currentScreen = const SellerHomepage();
+                              currentScreen = const SellerSetting();
                               currentindex = 3;
                             });
                           },
                           child: Icon(
                             size: 38.w,
-                            Icons.notifications_none_rounded,
+                            Icons.settings,
                             color:
                                 currentindex == 3 ? Colors.white : Colors.grey,
                           ),

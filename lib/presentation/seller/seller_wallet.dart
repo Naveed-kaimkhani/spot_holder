@@ -5,7 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
 import 'package:provider/provider.dart';
+import '../../Data/FirebaseUserRepository.dart';
 import '../../Domain/models/user_model.dart';
+import '../../Domain/transaction.dart';
+import '../no_data_found.dart';
+import '../widget/circle_progress.dart';
+import '../widget/transaction_widget.dart';
+import '../widget/transaction_widget_for_seller.dart';
 
 class SellerWallet extends StatelessWidget {
   const SellerWallet({super.key});
@@ -40,7 +46,7 @@ class SellerWallet extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 130.w),
               child: Text(
-                "   ${seller!.balance} PKR",
+                " ${seller!.balance} Pkr",
                 style: CustomTextStyle.font_20,
               ),
             ),
@@ -58,6 +64,31 @@ class SellerWallet extends StatelessWidget {
               height: 11.h,
             ),
             const CustomDivider(),
+            StreamBuilder<List<TransactionModel>>(
+              stream: FirebaseUserRepository.getTransactionHistoryForSeller(
+                  context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircleProgress());
+                  // return SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const NoDataFoundScreen(
+                    text: "No Recent Transactions",
+                  );
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return TransactionHistoryWidgetForSeller(
+                            model: snapshot.data![index]);
+                      });
+                }
+              },
+            ),
           ],
         ),
       ),
