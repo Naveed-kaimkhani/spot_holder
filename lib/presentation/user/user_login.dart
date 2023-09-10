@@ -8,6 +8,7 @@ import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:spot_holder/style/images.dart';
 import 'package:spot_holder/utils/utils.dart';
 
+import 'package:spot_holder/Domain/models/user_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../style/styling.dart';
 import '../../Data/FirebaseUserRepository.dart';
