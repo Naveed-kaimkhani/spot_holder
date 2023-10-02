@@ -73,7 +73,9 @@ class _UserParkingTrakingState extends State<UserParkingTraking> {
       getPolyPoints();
       positionStreamSubscription = Geolocator.getPositionStream().listen(
         (Position position) async {
-          GoogleMapController controller = await _controller.future;
+          // GoogleMapController controller = await _controller.future;
+          await FirebaseUserRepository.updateRiderLocation(
+              position.latitude, position.longitude);
 
           setState(() {
             currentLocation = position;
@@ -175,12 +177,14 @@ class _UserParkingTrakingState extends State<UserParkingTraking> {
     double firstLine = (widget.parkingModel.parkingAddress!.length / 2);
     return SafeArea(
       child: sellerTracingIcon == null
-          ? LoadingMap()
+          ? const LoadingMap()
           : Scaffold(
               bottomNavigationBar: TracingScreenBottomNavigation(
                 distance: distance,
                 halfLength: halfLength,
+                text: "call owner",
                 // widget: widget,
+                phone: widget.parkingModel.userContact!,
                 address: widget.parkingModel.parkingAddress!,
                 firstLine: firstLine,
               ),

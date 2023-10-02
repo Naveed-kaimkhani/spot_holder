@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/utils/utils.dart';
 import '../../style/styling.dart';
-import '../user/user_parking_direction.dart';
 
 class TracingScreenBottomNavigation extends StatelessWidget {
   const TracingScreenBottomNavigation({
@@ -10,16 +9,16 @@ class TracingScreenBottomNavigation extends StatelessWidget {
     required this.distance,
     required this.halfLength,
     required this.address,
-    // required this.widget,
+    required this.phone,
     required this.firstLine,
-    // required this.widget,
+    required this.text,
   });
-
+final String? text;
   final String? distance;
   final double halfLength;
   final double firstLine;
   final String address;
-
+  final String phone;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,16 +83,16 @@ class TracingScreenBottomNavigation extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.r),
                 color: Styling.primaryColor,
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.call,
                     color: Colors.white,
                   ),
                   Text(
-                    "Call Owner",
-                    style: TextStyle(
+                    text??"",
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
@@ -102,8 +101,8 @@ class TracingScreenBottomNavigation extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // utils.launchphone(
-              //     widget.requestModel.senderPhone!, context);
+              utils.launchphone(
+                  phone, context);
             },
           ),
           SizedBox(

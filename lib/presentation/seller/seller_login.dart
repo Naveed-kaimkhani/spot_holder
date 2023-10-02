@@ -78,7 +78,9 @@ class _SellerLoginState extends State<SellerLogin> {
   void _getUserDetails() async {
         await Provider.of<UserProvider>(context, listen: false)
             .getSellerFromServer(context);
-
+    isLoading(false);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => SellerNavigation()));
     // _firebaseRepository.getSeller().then((UserModel? userModel) async {
     //   if (userModel != null) {
     //     // await _firebaseRepository.loadUserDataOnAppInit(context);

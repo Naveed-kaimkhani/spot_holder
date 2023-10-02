@@ -40,7 +40,7 @@ class UserSellerScreen extends StatelessWidget {
                 height: 80.h,
               ),
               Image.asset(
-                Images.spot,
+                Images.logo,
                 height: 37.h,
                 width: 129.w,
               ),

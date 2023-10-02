@@ -118,7 +118,7 @@ class _SellerNavigationState extends State<SellerNavigation> {
                             });
                           },
                           child: Icon(
-                            size: 38.w,
+                            size: 36.w,
                             Icons.settings,
                             color:
                                 currentindex == 3 ? Colors.white : Colors.grey,

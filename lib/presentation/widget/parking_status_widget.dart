@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:spot_holder/presentation/seller/track_user.dart';
 import 'package:spot_holder/presentation/widget/time_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spot_holder/utils/utils.dart';
@@ -53,7 +54,7 @@ class ParkingStatusWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  parking.userContact!,
+                  parking.durationTime!,
                   style: CustomTextStyle.font_12_grey,
                 ),
                 Text(
@@ -63,15 +64,15 @@ class ParkingStatusWidget extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 5.h,
+              height: 2.h,
             ),
             Text(
               parking.userName!,
               style: CustomTextStyle.font_18_black,
             ),
-            SizedBox(
-              height: 12.h,
-            ),
+            // SizedBox(
+            //   height: 3.h,
+            // ),
             Row(
               children: [
                 SvgPicture.asset(Images.spot),
@@ -83,16 +84,20 @@ class ParkingStatusWidget extends StatelessWidget {
                   style: CustomTextStyle.font_12_grey,
                 ),
                 SizedBox(
-                  width: 154.w,
+                  width: 164.w,
                 ),
-                const Icon(
-                  Icons.hourglass_bottom,
-                  color: Styling.primaryColor,
-                ),
-                Text(
-                  "${parking.durationTime!} hr",
-                  style: CustomTextStyle.font_12_grey,
-                ),
+                InkWell(
+                  child: Icon(
+                    Icons.directions,
+                    color: Styling.primaryColor,
+                    size: 36.h,
+                  ),
+                  onTap: (){
+                    Navigator.push(context,MaterialPageRoute(builder: (context){
+                      return TrackUser(requestModel: parking);
+                    }));
+                  },
+                )
               ],
             ),
           ],

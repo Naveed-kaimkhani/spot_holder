@@ -36,10 +36,28 @@ class CustomTextStyle {
     fontSize: 18.sp,
     fontWeight: FontWeight.w700,
   );
+  
+  static final font_22_primary = TextStyle(
+    color: Styling.primaryColor,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w700,
+  );
 
   static final font_12_primary = TextStyle(
     color: Styling.primaryColor,
     fontSize: 12.sp,
+    fontWeight: FontWeight.w700,
+  );
+  
+  static final font_10_primary = TextStyle(
+    color: Styling.primaryColor,
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static final font_14_primary = TextStyle(
+    color: Styling.primaryColor,
+    fontSize: 14.sp,
     fontWeight: FontWeight.w700,
   );
 

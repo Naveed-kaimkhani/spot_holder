@@ -68,17 +68,8 @@ class UserHomepage extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          child: ReservedParkingHeader(
-                              parking: snapshot.data![index]),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserParkingTraking(
-                                        parkingModel: snapshot.data![index])));
-                          },
-                        );
+                        return ReservedParkingHeader(
+                            parking: snapshot.data![index]);
                       });
                 }
               },

@@ -52,7 +52,7 @@ class SellerSetting extends StatelessWidget {
             text: "About Us",
             // imageURL: Images.mechanic_pic,
             icon: Icons.admin_panel_settings,
-            routeName: RoutesName.contactUs,
+            routeName: RoutesName.aboutUs,
           ),
           const CustomDivider(),
           SizedBox(

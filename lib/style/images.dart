@@ -15,7 +15,9 @@ class Images {
   static const String spot = 'assets/spot.svg';
  static const String done = 'assets/done.json';
  static const String locationIcon = 'assets/locationIcon.png';
- 
+
+  static const String contactUs = 'assets/contact_us.svg';
+  static const String aboutUs = 'assets/about_us.svg';
  
   
 }

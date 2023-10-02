@@ -93,7 +93,7 @@ if (user!=null ) {
               width: 180.w,
             ),
             SizedBox(
-              height: 230.w,
+              height: 230.h,
             ),
             const Padding(
               padding: const EdgeInsets.only(top: 8.0),

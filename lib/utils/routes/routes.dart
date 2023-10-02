@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:spot_holder/presentation/about_us.dart';
 import 'package:spot_holder/presentation/seller/add_new_parking.dart';
 import 'package:spot_holder/presentation/seller/seller_sign.dart';
 import 'package:spot_holder/presentation/user/change_password.dart';
 import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/presentation/user/user_signup.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
-
+import '../../presentation/contact_us.dart';
 import '../../presentation/user/user_login.dart';
 
 class Routes {
@@ -27,8 +28,11 @@ class Routes {
       case RoutesName.userSignup:
         return _buildRoute(const UserSignUp(), settings);
 
-      // case RoutesName.trackDonation:
-      //   return _buildRoute( TrackDonation(), settings);
+      case RoutesName.contactUs:
+        return _buildRoute(ContactUs(), settings);
+
+      case RoutesName.aboutUs:
+        return _buildRoute(AboutUs(), settings);
 
       // case RoutesName.userSingup:
       //   return _buildRoute(const UserSignup(), settings);

@@ -3,22 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:spot_holder/presentation/seller/add_new_parking.dart';
-import 'package:spot_holder/presentation/seller/seller_homepage.dart';
 import 'package:spot_holder/presentation/seller/seller_login.dart';
-import 'package:spot_holder/presentation/seller/seller_navigation.dart';
-import 'package:spot_holder/presentation/seller/seller_sign.dart';
-import 'package:spot_holder/presentation/user/booking.dart';
-import 'package:spot_holder/presentation/user/parking_spots_onMap.dart';
-import 'package:spot_holder/presentation/user/user_homepage.dart';
 import 'package:spot_holder/presentation/user/user_login.dart';
-import 'package:spot_holder/presentation/user/user_navigation.dart';
-import 'package:spot_holder/presentation/user/user_signup.dart';
-import 'package:spot_holder/presentation/user/user_wallet.dart';
 import 'package:spot_holder/provider/parking_list_provider.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/utils/routes/routes.dart';
-import 'package:spot_holder/utils/utils.dart';
 
 // GetIt getIt = GetIt.instance;
 late Size mq;
@@ -32,19 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // getIt.registerLazySingleton<UsersRepository>(() => FirebaseUserRepository());
   runApp(
-      // // MultiProvider(
-      // //   providers: [
-      // //     ChangeNotifierProvider(
-      // //       create: (_) =>
-      // //           UserProvider(usersRepository: getIt())..getUser(),
-      // //     ),
-      // //   ],
-      //   child: const MyApp(),
-      // ),
       const MyApp());
 }
 

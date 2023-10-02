@@ -458,4 +458,14 @@ class FirebaseUserRepository {
       utils.toastMessage(e.toString());
     }
   }
+
+  
+// Update rider's location in Firestore
+static Future<void> updateRiderLocation(double latitude, double longitude,) async{
+  FirebaseFirestore.instance.collection('users').doc(utils.currentUserUid).update({
+    'lat': latitude,
+    'long': longitude,
+    // Add any additional rider information you need to update
+  });
+}
 }

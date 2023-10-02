@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/widget/time_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spot_holder/style/styling.dart';
 import 'package:spot_holder/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ import '../../main.dart';
 import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/images.dart';
+import '../user/user_parking_direction.dart';
 
 class ReservedParkingHeader extends StatelessWidget {
   final ReservedParkingModel parking;
@@ -83,15 +85,58 @@ class ReservedParkingHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TimeWidget(
-                  time: parking.reservedTime!,
-                  date: parking.reservedDate!,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Reserved Time",
+                      style: CustomTextStyle.font_12_primary,
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    TimeWidget(
+                      time: parking.reservedTime!,
+                      date: parking.reservedDate!,
+                    ),
+                    InkWell(
+                      child: Icon(
+                        Icons.directions,
+                        size: 34.h,
+                        color: Styling.primaryColor,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    UserParkingTraking(parkingModel: parking)));
+                      },
+                    ),
+                  ],
                 ),
-                // TimeWidget(
-                //   time: parking.durationTime!,
-                //   date: "6 Feb, 2023",
-                //   charges: 60,
-                // ),
+                Column(
+                  children: [
+                    Text(
+                      "Parking Plan",
+                      style: CustomTextStyle.font_12_primary,
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      parking.durationTime!,
+                      style: CustomTextStyle.font_18_black,
+                    ),
+                    SizedBox(
+                      height: 34.h,
+                    ),
+                    Text(
+                      "${parking.price} Pkr",
+                      style: CustomTextStyle.font_22_primary,
+                    ),
+                  ],
+                ),
               ],
             )
           ],

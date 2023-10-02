@@ -55,7 +55,7 @@ class PreviousParkingWidget extends StatelessWidget {
                 SvgPicture.asset(Images.spot),
                 Text(
                   " Spots ${parking.availableSlots}",
-                  style: CustomTextStyle.font_12_grey,
+                  style: CustomTextStyle.font_10_primary,
                 ),
                 SizedBox(
                   width: 82.w,

@@ -51,27 +51,6 @@ class _ParkingSpotsOnMapState extends State<ParkingSpotsOnMap> {
     });
   }
 
-  // loadData() async {
-  //   print("in load data");
-  //   try {
-  //     user = Provider.of<UserProvider>(context, listen: false).user;
-  //     _listOfParkingsModel =
-  //      Provider.of<ParkingListProvider>(context, listen: false).parkingList;
-  //     print(_listOfParkingsModel);
-  //     addMarker(user!.lat!, user!.long!, '1', 'My Position 1');
-
-  //     setState(() {
-  //       _cameraPosition = CameraPosition(
-  //         target: LatLng(user!.lat!, user!.long!),
-  //         zoom: 18,
-  //       );
-  //       animateCamera();
-  //     });
-  //   } catch (error) {
-  //     utils.flushBarErrorMessage(error.toString(), context);
-  //   }
-  // }
-
   loadLocation() async {
     try {
       user = Provider.of<UserProvider>(context, listen: false).user;

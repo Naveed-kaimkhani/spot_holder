@@ -39,6 +39,9 @@ class _BookingState extends State<Booking> {
     return '';
   }
 
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
   String getNumericValue(String input) {
     // Remove non-digit characters from the input
     String numericValue = input.replaceAll(RegExp(r'[^0-9]'), '');
@@ -63,8 +66,8 @@ class _BookingState extends State<Booking> {
           selectedValue),
       bookedSlots: selectedValue,
       parkingAddress: widget.parking.parkingAddress,
-      reservedDate: utils.getCurrentDate(),
-      reservedTime: utils.getCurrentTime(),
+      reservedDate: "${selectedDate.toLocal()}".split(' ')[0],
+      reservedTime: selectedTime.format(context),
       // durationDate: ,
       durationTime: splitStringFromColon(listOfPrice![currentIndex], 0),
       ownerDeviceToken: widget.parking.ownerDeviceToken,
@@ -100,6 +103,33 @@ class _BookingState extends State<Booking> {
         .getUserFromServer(context);
     // Navigator.pushNamed(context, RoutesName.userNavigation);
     LoaderOverlay.hide();
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+      });
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
   }
 
   @override
@@ -209,15 +239,22 @@ class _BookingState extends State<Booking> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              DateTimeWidget(
-                                icon: Icons.calendar_month_outlined,
-                                text: "6 Febuary, Monday",
-                                widht: 180.w,
+                              InkWell(
+                                child: DateTimeWidget(
+                                  icon: Icons.calendar_month_outlined,
+                                  text:
+                                      "${selectedDate.toLocal()}".split(' ')[0],
+                                  widht: 180.w,
+                                ),
+                                onTap: () => _selectDate(context),
                               ),
-                              DateTimeWidget(
-                                icon: Icons.timer,
-                                text: "1:30 pm",
-                                widht: 120.w,
+                              InkWell(
+                                child: DateTimeWidget(
+                                  icon: Icons.timer,
+                                  text: selectedTime.format(context),
+                                  widht: 120.w,
+                                ),
+                                onTap: () => _selectTime(context),
                               ),
                             ],
                           ),
@@ -336,33 +373,6 @@ class _BookingState extends State<Booking> {
   }
 }
 
-// class MyDropdownButton extends StatefulWidget {
-
-//   @override
-//   _MyDropdownButtonState createState() => _MyDropdownButtonState();
-// }
-
-// class _MyDropdownButtonState extends State<MyDropdownButton> {
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return DropdownButton<int>(
-//       value: selectedValue,
-//       onChanged: (int? newValue) {
-//         setState(() {
-//           selectedValue = newValue!;
-//         });
-//       },
-//       items: List<DropdownMenuItem<int>>.generate(5, (index) {
-//         return DropdownMenuItem<int>(
-//           value: index + 1,
-//           child: Text('${index + 1}'),
-//         );
-//       }),
-//     );
-//   }
-// }
-
 class PlansWidget extends StatelessWidget {
   final String time;
   final String price;
@@ -441,7 +451,7 @@ class DateTimeWidget extends StatelessWidget {
           ),
           Text(
             text,
-            style: CustomTextStyle.font_12_primary,
+            style: CustomTextStyle.font_14_primary,
           )
         ],
       ),
