@@ -3,9 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../domain/models/user_model.dart';
+import 'package:spot_holder/presentation/seller/seller_navigation.dart';
+import 'package:spot_holder/presentation/widget/home_header.dart';
+import 'package:spot_holder/utils/utils.dart';
+import '../../Data/FirebaseUserRepository.dart';
+import '../../Domain/models/user_model.dart';
+import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/styling.dart';
+import '../widget/auth_button.dart';
+import '../widget/circle_progress.dart';
+import '../widget/profile_pic.dart';
+import '../widget/update_profile_field.dart';
 class UpdateNGoProfile extends StatefulWidget {
   UpdateNGoProfile({Key? key}) : super(key: key);
 
@@ -57,7 +66,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
     right: 10.h,
     // top: 10.h,
   );
-  final users = FirebaseFirestore.instance.collection('NGOs');
+  final users = FirebaseFirestore.instance.collection('sellers');
   UserModel? user;
   Future<String> updateUpdateNGoProfile() async {
     String UpdateNGoProfileUrl =
@@ -65,7 +74,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
             imageFile: _UpdateNGoProfileImage!, uid: utils.currentUserUid);
     return UpdateNGoProfileUrl;
   }
-
+  
   void isLoading(bool value) {
     setState(() {
       isLoadingNow = value;
@@ -113,9 +122,9 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
   Future<void> _getUserDetails(String uid) async {
     try {
       await Provider.of<UserProvider>(context, listen: false)
-          .getUserFromServer(context);
+          .getSellerFromServer(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const NgoNavigation();
+        return const SellerNavigation();
       }));
     } catch (e) {
       utils.flushBarErrorMessage(e.toString(), context);
@@ -124,7 +133,8 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<UserProvider>(context, listen: false).ngo;
+ user =
+        Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -133,11 +143,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const AllDonarsScreenHeader(
-                  header: "Update Profile",
-                  subHeader: "",
-                backButton: true,
-                ),
+                HomeHeader(barTitle: "Update Profile", height: 115.h),
                 SizedBox(
                   height: 21.h,
                 ),
@@ -214,6 +220,9 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                     child: isLoadingNow
                         ? const CircleProgress()
                         : AuthButton(
+                          
+                            height: 56.h,
+                            widht: 300.w,
                             func: () async {
                               utils.checkConnectivity(context);
                               isLoading(true);
@@ -347,7 +356,7 @@ class Header extends StatelessWidget {
             ),
             Text(
               "Update UpdateNGoProfile",
-              style: CustomTextStyle.font_20_appColor,
+              style: CustomTextStyle.font_18_primary,
             ),
           ],
         ));
