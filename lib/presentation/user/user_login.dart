@@ -59,37 +59,34 @@ class _UserLoginState extends State<UserLogin> {
   void _login() {
     isLoading(true);
     _firebaseRepository
-        // .login(_emailController.text, _passwordController.text, context)
-        .login("kkk@gmail.com", "111111", context)
+        .login(_emailController.text, _passwordController.text, context)
+        // .login("kkk@gmail.com", "111111", context)
         .then((User? user) async {
       if (user != null) {
         //  final   currentLocation = await Geolocator.getCurrentPosition();
-        _getUserDetails();
+        getUser();
       } else {
         isLoading(false);
         utils.flushBarErrorMessage("Failed to login", context);
       }
     });
   }
-
-  void _getUserDetails() async {
-    _firebaseRepository.getUser().then((UserModel? userModel) async {
-      if (userModel != null) {
+  
+void getUser()async{
+  try {
+    
         await _firebaseRepository.loadUserDataOnAppInit(context);
 
         await StorageService.initUser();
         isLoading(false);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => UserNavigation()));
-      } else {
-        isLoading(false);
-        utils.flushBarErrorMessage("User is null", context);
-      }
-    }).catchError((error) {
-      isLoading(false);
-      utils.flushBarErrorMessage(error.message.toString(), context);
-    });
+  } catch (e) {
+    isLoading(false);
+    utils.flushBarErrorMessage(e.toString(), context);
   }
+     
+}
 
   @override
   void dispose() {
@@ -193,8 +190,8 @@ class _UserLoginState extends State<UserLogin> {
                             text: "Login",
                             func: () {
                               FocusManager.instance.primaryFocus?.unfocus();
-                              // _submitForm();
-                              _login();
+                              _submitForm();
+                              // _login();
                             },
                             color: Styling.primaryColor),
                   ),

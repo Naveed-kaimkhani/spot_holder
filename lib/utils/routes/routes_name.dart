@@ -10,4 +10,9 @@ static const String contactUs = 'ContactUs';
 static const String passwordOption = 'PasswordOption';
    static const String aboutUs = 'AboutUs';
   static const String privacyPolicy = 'PrivacyPolicyScreen';
+  static const String UpdateSellerProfile = 'UpdateSellerProfile';
+static const String sellerPasswordOption = 'SellerPasswordOption';
+static const String PrivacyPolicyScreen = 'PrivacyPolicyScreen';
+
+  static const String UpdateUserProfile = 'UpdateUserProfile';
 }

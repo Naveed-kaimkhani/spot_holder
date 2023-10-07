@@ -27,6 +27,7 @@ class UserWallet extends StatelessWidget {
           children: [
             HomeHeader(
               height: 94.h,
+              profile: user!.profileImage!,
               barTitle: "User Wallet",
             ),
             SizedBox(

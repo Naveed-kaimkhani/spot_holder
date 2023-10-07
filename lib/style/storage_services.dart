@@ -28,6 +28,13 @@ static Future<void> initUser()async{
           // await preferences.setInt('initScreen', 1);
           await preferences.setInt('isUser', 1);
 }
+
+static Future<void> clearPreferences()async{
+  
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          // await preferences.setInt('initScreen', 1);
+          await preferences.setInt('isUser', 0);
+}
   // static Future<void> saveAdmin(UserModel sellerModel) async {
   //   _sharedPreferences = await SharedPreferences.getInstance();
   //   _sharedPreferences.setString(

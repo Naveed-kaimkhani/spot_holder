@@ -34,6 +34,7 @@ class ParkingStatus extends StatelessWidget {
           children: [
             HomeHeader(
               height: 84.h,
+              profile: user!.profileImage!,
               // text: "Hi ${user!.name}",
               barTitle: "Parking Status",
             ),

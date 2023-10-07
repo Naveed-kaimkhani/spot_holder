@@ -134,6 +134,8 @@ class _BookingState extends State<Booking> {
 
   @override
   Widget build(BuildContext context) {
+    
+    user = Provider.of<UserProvider>(context, listen: false).user;
     var price = widget.parking.price;
     var multipliedByTwo = price! * 2;
     var multipliedByThree = price * 3;
@@ -149,8 +151,9 @@ class _BookingState extends State<Booking> {
         user!.long!, widget.parking.locationLat!, widget.parking.locationLong!);
     return SafeArea(
       child: Scaffold(
-        appBar: const custom_appbar(
+        appBar: custom_appbar(
           title: "check out",
+          profile: user!.profileImage!,
         ),
         body: Stack(
           children: [

@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/user/user_login.dart';
+import 'package:spot_holder/style/storage_services.dart';
 import 'package:spot_holder/utils/utils.dart';
 
 import '../../style/styling.dart';
+import '../../user_or_seller.dart';
 
 showLogoutPopup(context) async {
   return await showDialog(
@@ -23,12 +24,14 @@ showLogoutPopup(context) async {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                         await     utils.logOutUser(context);
+                          await utils.logOutUser(context);
+                          await StorageService.clearPreferences();
                           // ignore: use_build_context_synchronously
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const UserLogin()));
+                                  builder: (context) =>
+                                      const UserSellerScreen()));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Styling.primaryColor),

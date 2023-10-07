@@ -71,7 +71,8 @@ class SellerHomepage extends StatelessWidget {
               children: [
                 HomeHeader(
                   height: 180.h,
-                  text: "Hi ${seller!.name}",
+                  profile: seller!.profileImage!,
+                  text: "Hi ${seller.name}",
                   barTitle: "Home",
                 ),
                 const NoDataFoundScreen(
@@ -85,9 +86,10 @@ class SellerHomepage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   HomeHeader(
-                    height: 180.h,
-                    text: "Hi Qamar",
+                    height: 160.h,
+                    text: "Hi ${seller!.name}",
                     barTitle: "Home",
+                    profile: seller.profileImage!,
                   ),
                   SizedBox(
                     height: 20.h,

@@ -15,14 +15,15 @@ import '../widget/auth_button.dart';
 import '../widget/circle_progress.dart';
 import '../widget/profile_pic.dart';
 import '../widget/update_profile_field.dart';
-class UpdateNGoProfile extends StatefulWidget {
-  UpdateNGoProfile({Key? key}) : super(key: key);
+
+class UpdateSellerProfile extends StatefulWidget {
+  const UpdateSellerProfile({Key? key}) : super(key: key);
 
   @override
-  State<UpdateNGoProfile> createState() => _UpdateNGoProfileState();
+  State<UpdateSellerProfile> createState() => _UpdateSellerProfileState();
 }
 
-class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
+class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   @override
   void initState() {
     _nameController.text = "";
@@ -45,7 +46,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
   }
 
   bool isLoadingNow = false;
-  Uint8List? _UpdateNGoProfileImage;
+  Uint8List? _UpdateSellerProfileImage;
   FocusNode nameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode cityFocusNode = FocusNode();
@@ -56,10 +57,10 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
   final FirebaseUserRepository _FirebaseUserRepository =
       FirebaseUserRepository();
   SizedBox spaceBtwHeadnField = SizedBox(
-    height: 1.h,
+    height: 0.h,
   );
   SizedBox spaceAfterEveryField = SizedBox(
-    height: 14.h,
+    height: 18.h,
   );
   EdgeInsetsGeometry k = EdgeInsets.only(
     left: 10.h,
@@ -68,13 +69,13 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
   );
   final users = FirebaseFirestore.instance.collection('sellers');
   UserModel? user;
-  Future<String> updateUpdateNGoProfile() async {
-    String UpdateNGoProfileUrl =
+  Future<String> updateUpdateSellerProfile() async {
+    String UpdateSellerProfileUrl =
         await _FirebaseUserRepository.uploadProfileImage(
-            imageFile: _UpdateNGoProfileImage!, uid: utils.currentUserUid);
-    return UpdateNGoProfileUrl;
+            imageFile: _UpdateSellerProfileImage!, uid: utils.currentUserUid);
+    return UpdateSellerProfileUrl;
   }
-  
+
   void isLoading(bool value) {
     setState(() {
       isLoadingNow = value;
@@ -83,8 +84,8 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
 
   Future<void> updateData() {
     final uid = utils.currentUserUid;
-    if (_UpdateNGoProfileImage != null) {
-      updateUpdateNGoProfile()
+    if (_UpdateSellerProfileImage != null) {
+      updateUpdateSellerProfile()
           .then((url) => {
                 users.doc(uid).update({
                   "profileImage": url,
@@ -121,6 +122,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
 
   Future<void> _getUserDetails(String uid) async {
     try {
+      await utils.clearImageCache(user!.profileImage!);
       await Provider.of<UserProvider>(context, listen: false)
           .getSellerFromServer(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -133,23 +135,26 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
 
   @override
   Widget build(BuildContext context) {
- user =
-        Provider.of<UserProvider>(context, listen: false).seller;
+    user = Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Styling.primaryColor,
+            title: const Text('Update Profile'),
+          ),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HomeHeader(barTitle: "Update Profile", height: 115.h),
+                // HomeHeader(barTitle: "Update Profile", height: 90.h),
                 SizedBox(
-                  height: 21.h,
+                  height: 24.h,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 120.0),
-                  child: UploadUpdateNGoProfile(_UpdateNGoProfileImage),
+                  child: UploadUpdateSellerProfile(_UpdateSellerProfileImage),
                 ),
                 SizedBox(
                   height: 23.h,
@@ -159,7 +164,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                   child: Text(
                     "Your Name",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -179,7 +184,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                   child: Text(
                     "Address",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -199,7 +204,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                   child: Text(
                     "phone",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -220,7 +225,6 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                     child: isLoadingNow
                         ? const CircleProgress()
                         : AuthButton(
-                          
                             height: 56.h,
                             widht: 300.w,
                             func: () async {
@@ -239,11 +243,11 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
     );
   }
 
-  Widget UploadUpdateNGoProfile(Uint8List? image) {
+  Widget UploadUpdateSellerProfile(Uint8List? image) {
     return image == null
         ? Stack(
             children: [
-              // UpdateNGoProfilePic(url: url, height: height, width: width)
+              // UpdateSellerProfilePic(url: url, height: height, width: width)
               ProfilePic(url: user!.profileImage, height: 80.h, width: 94.w),
 
               Positioned(
@@ -254,7 +258,7 @@ class _UpdateNGoProfileState extends State<UpdateNGoProfile> {
                     Uint8List? _image = await utils.pickImage();
                     if (_image != null) {
                       setState(() {
-                        _UpdateNGoProfileImage = _image;
+                        _UpdateSellerProfileImage = _image;
                       });
                     } else {
                       debugPrint("Image not loaded");
@@ -355,7 +359,7 @@ class Header extends StatelessWidget {
               width: 25.w,
             ),
             Text(
-              "Update UpdateNGoProfile",
+              "Update UpdateSellerProfile",
               style: CustomTextStyle.font_18_primary,
             ),
           ],

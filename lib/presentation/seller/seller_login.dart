@@ -3,22 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/seller/seller_navigation.dart';
-import 'package:spot_holder/presentation/user/user_navigation.dart';
 import 'package:spot_holder/presentation/widget/auth_button.dart';
 import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:spot_holder/style/images.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
 import 'package:spot_holder/utils/utils.dart';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../style/styling.dart';
 import '../../Data/FirebaseUserRepository.dart';
-import '../../Domain/models/user_model.dart';
 import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
-import '../../style/storage_services.dart';
 import '../widget/auth_header.dart';
 import '../widget/custom_divider.dart';
 import '../widget/input_field.dart';
@@ -62,8 +56,8 @@ class _SellerLoginState extends State<SellerLogin> {
   void _login() {
     isLoading(true);
     _firebaseRepository
-        // .login(_emailController.text, _passwordController.text, context)
-        .login("seller@gmail.com", "111111", context)
+        .login(_emailController.text, _passwordController.text, context)
+        // .login("seller@gmail.com", "111111", context)
         .then((User? user) async {
       if (user != null) {
         //  final   currentLocation = await Geolocator.getCurrentPosition();
@@ -76,29 +70,11 @@ class _SellerLoginState extends State<SellerLogin> {
   }
 
   void _getUserDetails() async {
-        await Provider.of<UserProvider>(context, listen: false)
-            .getSellerFromServer(context);
+    await Provider.of<UserProvider>(context, listen: false)
+        .getSellerFromServer(context);
     isLoading(false);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => SellerNavigation()));
-    // _firebaseRepository.getSeller().then((UserModel? userModel) async {
-    //   if (userModel != null) {
-    //     // await _firebaseRepository.loadUserDataOnAppInit(context);
-    //     // await Provider.of<UserProvider>(context, listen: false)
-    //     //     .getSellerFromServer(context);
-
-    //     // await StorageService.initUser();
-    //     isLoading(false);
-    //     Navigator.pushReplacement(context,
-    //         MaterialPageRoute(builder: (context) => SellerNavigation()));
-    //   } else {
-    //     isLoading(false);
-    //     utils.flushBarErrorMessage("User is null", context);
-    //   }
-    // }).catchError((error) {
-    //   isLoading(false);
-    //   utils.flushBarErrorMessage(error.message.toString(), context);
-    // });
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SellerNavigation()));
   }
 
   @override
@@ -203,8 +179,8 @@ class _SellerLoginState extends State<SellerLogin> {
                             text: "Login",
                             func: () {
                               FocusManager.instance.primaryFocus?.unfocus();
-                              // _submitForm();
-                              _login();
+                              _submitForm();
+                              // _login();
                             },
                             color: Styling.primaryColor),
                   ),

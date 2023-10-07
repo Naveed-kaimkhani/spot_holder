@@ -192,6 +192,7 @@ class _ParkingSpotsOnMapState extends State<ParkingSpotsOnMap> {
                   ),
             HomeHeader(
               height: 84.h,
+              profile: user!.profileImage!,
               barTitle: "Map",
             ),
             CustomInfoWindow(

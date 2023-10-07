@@ -16,16 +16,20 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:spot_holder/presentation/widget/circle_progress.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../presentation/no_internet_connection.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class utils {
   static toastMessage(String message) {
     Fluttertoast.showToast(msg: message);
   }
   
+  
+ static Future<void> clearImageCache(String imageUrl) async {
+    await CachedNetworkImage.evictFromCache(imageUrl);
+  }
   static Future<XFile> compressImage(XFile image) async {
     final dir = await path_provider.getTemporaryDirectory();
     final targetPath = '${dir.absolute.path}/temp.jpg';

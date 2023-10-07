@@ -95,129 +95,136 @@ class _PasswordOptionState extends State<PasswordOption> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserProvider>(context, listen: false).seller;
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Privacy Policy'),
+          backgroundColor: Styling.primaryColor,
+        ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: 27.w, top: 28.h, right: 27.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30.r,
-                      child: ProfilePic(
-                        url: user!.profileImage,
-                        height: 60.h,
-                        width: 60.w,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30.r,
+                        child: ProfilePic(
+                          url: user!.profileImage,
+                          height: 60.h,
+                          width: 60.w,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.name!,
-                          style: TextStyle(
-                              fontSize: 30.sp, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                // SizedBox(
-                //   height: 14.h,
-                // ),
-                const Divider(
-                  thickness: 2.0,
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Current Password',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user.name!,
+                            style: TextStyle(
+                                fontSize: 30.sp, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                // SizedBox(
-                //   height: 10.h,
-                // ),
-                InputField(
-                    hint_text: "Current Password",
-                    currentNode: null,
-                    focusNode: null,
-                    nextNode: null,
-                    controller: _passController,
-                    icon: _obsecureText
-                        ? Icons.visibility_off
-                        : Icons.remove_red_eye,
-                    obsecureText: _obsecureText,
-                    onIconPress: () {
-                      setState(() {
-                        _obsecureText = !_obsecureText;
-                      });
-                    }),
-                SizedBox(
-                  height: 25.h,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'New Password',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold),
+                  // SizedBox(
+                  //   height: 14.h,
+                  // ),
+                  const Divider(
+                    thickness: 2.0,
                   ),
-                ),
-                // SizedBox(
-                //   height: 10.h,
-                // ),
-                InputField(
-                    hint_text: "New Password",
-                    currentNode: null,
-                    focusNode: null,
-                    nextNode: null,
-                    controller: _newPasswordController,
-                    icon: _obsecureText1
-                        ? Icons.visibility_off
-                        : Icons.remove_red_eye,
-                    obsecureText: _obsecureText1,
-                    onIconPress: () {
-                      setState(() {
-                        _obsecureText1 = !_obsecureText1;
-                      });
-                    }),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: isLoading
-                      ? const CircleProgress()
-                      : AuthButton(
-                          height: 46.h,
-                          widht: 250.w,
-                          text: 'Change Password',
-                          color: Styling.primaryColor,
-                          func: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Current Password',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 10.h,
+                  // ),
+                  InputField(
+                      hint_text: "Current Password",
+                      currentNode: null,
+                      focusNode: null,
+                      nextNode: null,
+                      controller: _passController,
+                      icon: _obsecureText
+                          ? Icons.visibility_off
+                          : Icons.remove_red_eye,
+                      obsecureText: _obsecureText,
+                      onIconPress: () {
+                        setState(() {
+                          _obsecureText = !_obsecureText;
+                        });
+                      }),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'New Password',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 10.h,
+                  // ),
+                  InputField(
+                      hint_text: "New Password",
+                      currentNode: null,
+                      focusNode: null,
+                      nextNode: null,
+                      controller: _newPasswordController,
+                      icon: _obsecureText1
+                          ? Icons.visibility_off
+                          : Icons.remove_red_eye,
+                      obsecureText: _obsecureText1,
+                      onIconPress: () {
+                        setState(() {
+                          _obsecureText1 = !_obsecureText1;
+                        });
+                      }),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: isLoading
+                        ? const CircleProgress()
+                        : AuthButton(
+                            height: 46.h,
+                            widht: 250.w,
+                            text: 'Change Password',
+                            color: Styling.primaryColor,
+                            func: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
 
-                            _validateFields();
-                          },
-                        ),
-                ),
-              ],
+                              _validateFields();
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

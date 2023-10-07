@@ -16,14 +16,14 @@ import '../widget/circle_progress.dart';
 import '../widget/profile_pic.dart';
 import '../widget/update_profile_field.dart';
 
-class UpdateSellerProfile extends StatefulWidget {
-  UpdateSellerProfile({Key? key}) : super(key: key);
+class UpdateUserProfile extends StatefulWidget {
+  UpdateUserProfile({Key? key}) : super(key: key);
 
   @override
-  State<UpdateSellerProfile> createState() => _UpdateSellerProfileState();
+  State<UpdateUserProfile> createState() => _UpdateUserProfileState();
 }
 
-class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
+class _UpdateUserProfileState extends State<UpdateUserProfile> {
   @override
   void initState() {
     _nameController.text = "";
@@ -46,7 +46,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   }
 
   bool isLoadingNow = false;
-  Uint8List? _UpdateSellerProfileImage;
+  Uint8List? _UpdateUserProfileImage;
   FocusNode nameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode cityFocusNode = FocusNode();
@@ -57,10 +57,10 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   final FirebaseUserRepository _FirebaseUserRepository =
       FirebaseUserRepository();
   SizedBox spaceBtwHeadnField = SizedBox(
-    height: 1.h,
+    height: 0.h,
   );
   SizedBox spaceAfterEveryField = SizedBox(
-    height: 14.h,
+    height: 18.h,
   );
   EdgeInsetsGeometry k = EdgeInsets.only(
     left: 10.h,
@@ -69,11 +69,11 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   );
   final users = FirebaseFirestore.instance.collection('users');
   UserModel? user;
-  Future<String> updateUpdateSellerProfile() async {
-    String UpdateSellerProfileUrl =
+  Future<String> updateUpdateUserProfile() async {
+    String UpdateUserProfileUrl =
         await _FirebaseUserRepository.uploadProfileImage(
-            imageFile: _UpdateSellerProfileImage!, uid: utils.currentUserUid);
-    return UpdateSellerProfileUrl;
+            imageFile: _UpdateUserProfileImage!, uid: utils.currentUserUid);
+    return UpdateUserProfileUrl;
   }
 
   void isLoading(bool value) {
@@ -84,8 +84,8 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
 
   Future<void> updateData() {
     final uid = utils.currentUserUid;
-    if (_UpdateSellerProfileImage != null) {
-      updateUpdateSellerProfile()
+    if (_UpdateUserProfileImage != null) {
+      updateUpdateUserProfile()
           .then((url) => {
                 users.doc(uid).update({
                   "profileImage": url,
@@ -122,7 +122,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
 
   Future<void> _getUserDetails(String uid) async {
     try {
-       await Provider.of<UserProvider>(context, listen: false)
+      await Provider.of<UserProvider>(context, listen: false)
           .getUserFromServer(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return const UserNavigation();
@@ -134,24 +134,31 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
 
   @override
   Widget build(BuildContext context) {
-   
-   user = Provider.of<UserProvider>(context, listen: false).user;
+    user = Provider.of<UserProvider>(context, listen: false).user;
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Update Profile'),
+            backgroundColor: Styling.primaryColor,
+          ),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-             
-          HomeHeader(barTitle: "Update Profile", height: 115.h),
+                // HomeHeader(
+                //   barTitle: "Update Profile",
+                //   height: 115.h,
+                //   profile: user!.profileImage!,
+                // ),
+
                 SizedBox(
                   height: 21.h,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 120.0),
-                  child: UploadUpdateSellerProfile(_UpdateSellerProfileImage),
+                  child: UploadUpdateUserProfile(_UpdateUserProfileImage),
                 ),
                 SizedBox(
                   height: 23.h,
@@ -161,7 +168,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                   child: Text(
                     "Your Name",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -181,7 +188,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                   child: Text(
                     "Address",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -201,7 +208,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                   child: Text(
                     "phone",
                     style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w700),
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
                   ),
                 ),
                 spaceBtwHeadnField,
@@ -222,8 +229,8 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                     child: isLoadingNow
                         ? const CircleProgress()
                         : AuthButton(
-                          height: 20.h,
-                          widht: 30.w,
+                            height: 56.h,
+                            widht: 300.w,
                             func: () async {
                               utils.checkConnectivity(context);
                               isLoading(true);
@@ -240,11 +247,11 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
     );
   }
 
-  Widget UploadUpdateSellerProfile(Uint8List? image) {
+  Widget UploadUpdateUserProfile(Uint8List? image) {
     return image == null
         ? Stack(
             children: [
-              // UpdateSellerProfilePic(url: url, height: height, width: width)
+              // UpdateUserProfilePic(url: url, height: height, width: width)
               ProfilePic(url: user!.profileImage, height: 80.h, width: 94.w),
 
               Positioned(
@@ -255,7 +262,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                     Uint8List? _image = await utils.pickImage();
                     if (_image != null) {
                       setState(() {
-                        _UpdateSellerProfileImage = _image;
+                        _UpdateUserProfileImage = _image;
                       });
                     } else {
                       debugPrint("Image not loaded");

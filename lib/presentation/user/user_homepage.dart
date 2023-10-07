@@ -1,16 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:spot_holder/Domain/models/reserved_parking_model.dart';
 import 'package:spot_holder/Domain/models/user_model.dart';
-import 'package:spot_holder/presentation/user/user_parking_direction.dart';
 import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:spot_holder/presentation/widget/previous_parking_widget.dart';
 import 'package:spot_holder/provider/user_provider.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
 import 'package:spot_holder/style/styling.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../Data/FirebaseUserRepository.dart';
 import '../no_data_found.dart';
@@ -32,8 +27,9 @@ class UserHomepage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeHeader(
-              height: 180.h,
-              text: "Hi ${user!.name}",
+              height: 160.h,
+              profile: user!.profileImage!,
+              text: "Hi ${user.name}",
               barTitle: "Home",
             ),
             SizedBox(
@@ -51,7 +47,8 @@ class UserHomepage extends StatelessWidget {
             ),
 
             StreamBuilder<List<ReservedParkingModel>>(
-              stream: FirebaseUserRepository.getReservedParkings("userUid",context),
+              stream: FirebaseUserRepository.getReservedParkings(
+                  "userUid", context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircleProgress();
@@ -78,25 +75,25 @@ class UserHomepage extends StatelessWidget {
             SizedBox(
               height: 22.h,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Previous parking",
-                    style: CustomTextStyle.font_18_primary,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      "view all",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(
+            //         "Previous parking",
+            //         style: CustomTextStyle.font_18_primary,
+            //       ),
+            //       const Padding(
+            //         padding: EdgeInsets.only(right: 8.0),
+            //         child: Text(
+            //           "view all",
+            //           style: TextStyle(color: Colors.blue),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             // PreviousParkingWidget(),
           ],
         ),

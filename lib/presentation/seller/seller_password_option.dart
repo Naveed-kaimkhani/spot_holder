@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/presentation/user/user_navigation.dart';
+import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:spot_holder/utils/utils.dart';
 import '../../Domain/models/user_model.dart';
 import '../../provider/user_provider.dart';
@@ -98,6 +99,10 @@ class _SellerPasswordOptionState extends State<SellerPasswordOption> {
     UserModel? user = Provider.of<UserProvider>(context, listen: false).seller;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Styling.primaryColor,
+          title: const Text('Change Password'),
+        ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
@@ -105,6 +110,8 @@ class _SellerPasswordOptionState extends State<SellerPasswordOption> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // HomeHeader(barTitle: "Change Password", height: 90.h),
+
                 Row(
                   children: [
                     CircleAvatar(

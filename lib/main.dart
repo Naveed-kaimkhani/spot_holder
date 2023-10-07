@@ -7,6 +7,8 @@ import 'package:spot_holder/presentation/seller/seller_login.dart';
 import 'package:spot_holder/presentation/user/user_login.dart';
 import 'package:spot_holder/provider/parking_list_provider.dart';
 import 'package:spot_holder/provider/user_provider.dart';
+import 'package:spot_holder/splash_screen.dart';
+import 'package:spot_holder/user_or_seller.dart';
 import 'package:spot_holder/utils/routes/routes.dart';
 
 // GetIt getIt = GetIt.instance;
@@ -21,8 +23,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(
-      const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => UserProvider()),
-            
+
             ChangeNotifierProvider(create: (_) => ParkingListProvider()),
             // ChangeNotifierProvider(create: (_) => SellerProvider()),
             // ChangeNotifierProvider(create: (_) => AllSellerDataProvider()),
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
             ),
             // home:utils.currentUserUid==null?SellerLogin():SellerNavigation(),
             // home:utils.currentUserUid==null?UserLogin():UserNavigation(),
-            home: SellerLogin(),
+            home: SplashScreen(),
             onGenerateRoute: Routes.onGenerateRoute,
           ),
         );

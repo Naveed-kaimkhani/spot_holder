@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:spot_holder/style/custom_text_style.dart';
@@ -28,6 +27,8 @@ class UserSellerComponent extends StatelessWidget {
             ),
             child: Image.asset(
               image,
+              height: 100.h,
+              width: 100.w,
             ),
           ),
         ),

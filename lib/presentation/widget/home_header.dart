@@ -14,10 +14,11 @@ class HomeHeader extends StatelessWidget {
   final String barTitle;
   // int? balance;
   final double height;
-  // final TextStyle style;
+  final String profile;
   HomeHeader({
     Key? key,
     this.text,
+   required this.profile,
     // this.balance,
     required this.barTitle,
     // required this.style,
@@ -43,6 +44,7 @@ class HomeHeader extends StatelessWidget {
           // CustomAppBar(),
           custom_appbar(
             title: barTitle,
+          profile: profile,
           ),
           SizedBox(
             height: 25.h,

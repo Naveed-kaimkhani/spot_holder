@@ -27,8 +27,9 @@ class SellerWallet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeHeader(
-              height: 94.h,
+              height: 84.h,
               barTitle: "SellerWallet",
+              profile: seller!.profileImage!,
             ),
             SizedBox(
               height: 12.h,

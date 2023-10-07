@@ -4,27 +4,35 @@ import 'package:spot_holder/presentation/widget/custom_divider.dart';
 import 'package:spot_holder/presentation/widget/home_header.dart';
 import 'package:spot_holder/utils/routes/routes_name.dart';
 
+import '../../Domain/models/user_model.dart';
+import '../../provider/user_provider.dart';
 import '../../style/custom_text_style.dart';
 import '../../style/styling.dart';
 import '../../utils/Dialogues/logout_popup.dart';
 import '../widget/services_setting_header.dart';
+import 'package:provider/provider.dart';
 
 class UserSetting extends StatelessWidget {
   const UserSetting({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
     return Scaffold(
       body: Column(
         children: [
-          HomeHeader(barTitle: "Settings", height: 115.h),
+          HomeHeader(
+            barTitle: "Settings",
+            height: 115.h,
+            profile: user!.profileImage!,
+          ),
           SizedBox(
             height: 20.h,
           ),
           SettingServicesScreenWidget(
             text: "profile",
             icon: Icons.admin_panel_settings,
-            routeName: "password",
+            routeName: "UpdateUserProfile",
           ),
           //  ServicesNSettingHeade(text: 'Setting Available'),
           const CustomDivider(),
@@ -38,7 +46,7 @@ class UserSetting extends StatelessWidget {
             text: "Privacy Policy",
             // imageURL: Images.wheel,
             icon: Icons.privacy_tip_outlined,
-            routeName: " ",
+            routeName: RoutesName.PrivacyPolicyScreen,
           ),
           const CustomDivider(),
           SettingServicesScreenWidget(
