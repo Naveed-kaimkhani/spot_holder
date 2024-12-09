@@ -11,7 +11,7 @@ class UserModel {
   String? email;
   String? deviceToken;
 
-
+//leran freezed model
   UserModel(
       {required this.uid,
       this.profileImage,
